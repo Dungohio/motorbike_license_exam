@@ -1,0 +1,13 @@
+const mongoose = require('mongoose');
+
+// Kết nối tới MongoDB qua Mongoose
+async function connectDB() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('Thiếu biến môi trường MONGODB_URI');
+  }
+  await mongoose.connect(uri);
+  console.log('Đã kết nối MongoDB');
+}
+
+module.exports = connectDB;

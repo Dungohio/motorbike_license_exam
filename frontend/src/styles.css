@@ -1,0 +1,41 @@
+/* Tông màu chủ đạo: trắng + xanh nước biển */
+:root {
+  --bs-primary: #0d6efd;
+  --navy: #0a58ca;
+  --sky-bg: #f5f9ff;
+}
+
+body {
+  background-color: var(--sky-bg);
+}
+
+/* Nút và điểm nhấn dùng xanh nước biển */
+.text-brand {
+  color: var(--navy);
+}
+
+.navbar-brand {
+  font-weight: 700;
+}
+
+/* Thẻ câu hỏi khi ôn tập / xem lại */
+.option-correct {
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+}
+.option-wrong {
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
+
+/* Đồng hồ đếm ngược */
+.exam-timer {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.question-nav-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
