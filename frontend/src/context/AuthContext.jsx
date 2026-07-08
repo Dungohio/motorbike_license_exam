@@ -40,8 +40,11 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  // Cập nhật lại user trong context sau khi sửa profile
+  const updateUser = (newUser) => setUser(newUser);
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

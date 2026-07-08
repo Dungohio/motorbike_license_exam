@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const licenseClassRoutes = require('./routes/licenseClass.routes');
 const categoryRoutes = require('./routes/category.routes');
 const questionRoutes = require('./routes/question.routes');
@@ -22,6 +23,7 @@ app.get('/api/health', (req, res) => {
 
 // Gắn các nhóm route
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/license-classes', licenseClassRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/questions', questionRoutes);

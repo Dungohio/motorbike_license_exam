@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bgh" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6fbf4"/>
+      <stop offset="1" stop-color="#c9f2e4"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="220" fill="url(#bgh)"/>
+  <circle cx="355" cy="35" r="55" fill="#2a9d8f" opacity="0.12"/>
+  <circle cx="45" cy="195" r="65" fill="#2a9d8f" opacity="0.10"/>
+
+  <!-- Bảng biểu đồ -->
+  <g transform="translate(200,115)">
+    <rect x="-115" y="-75" width="230" height="150" rx="12" fill="#ffffff"/>
+    <!-- trục -->
+    <path d="M-90 55 L -90 -50 M-90 55 L 95 55" stroke="#c9d8f0" stroke-width="4" stroke-linecap="round"/>
+    <!-- cột -->
+    <rect x="-72" y="5" width="26" height="50" rx="5" fill="#9ec5fe"/>
+    <rect x="-32" y="-15" width="26" height="70" rx="5" fill="#5a9cf8"/>
+    <rect x="8" y="-38" width="26" height="93" rx="5" fill="#0d6efd"/>
+    <rect x="48" y="-20" width="26" height="75" rx="5" fill="#2a9d8f"/>
+    <!-- đường xu hướng -->
+    <path d="M-60 0 L -20 -22 L 20 -46 L 60 -28" stroke="#e63946" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="-60" cy="0" r="6" fill="#e63946"/>
+    <circle cx="-20" cy="-22" r="6" fill="#e63946"/>
+    <circle cx="20" cy="-46" r="6" fill="#e63946"/>
+    <circle cx="60" cy="-28" r="6" fill="#e63946"/>
+  </g>
+
+  <!-- Huy hiệu đạt -->
+  <g transform="translate(330,150)">
+    <circle r="30" fill="#2a9d8f"/>
+    <circle r="24" fill="#ffffff"/>
+    <path d="M-10 0 L -3 8 L 12 -9" stroke="#2a9d8f" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-12 26 L -6 44 L 0 34 L 6 44 L 12 26" fill="#ffc107"/>
+  </g>
+</svg>

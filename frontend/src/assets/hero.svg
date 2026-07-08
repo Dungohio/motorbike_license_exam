@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 480" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a58ca"/>
+      <stop offset="0.55" stop-color="#1d7af0"/>
+      <stop offset="1" stop-color="#7db8ff"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#33415c"/>
+      <stop offset="1" stop-color="#1f2a3d"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4d94f5"/>
+      <stop offset="1" stop-color="#2f7ce0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Bầu trời -->
+  <rect width="1400" height="480" fill="url(#sky)"/>
+
+  <!-- Mặt trời -->
+  <circle cx="1150" cy="110" r="58" fill="#ffd166" opacity="0.95"/>
+  <circle cx="1150" cy="110" r="82" fill="#ffd166" opacity="0.25"/>
+
+  <!-- Mây -->
+  <g fill="#ffffff" opacity="0.85">
+    <ellipse cx="240" cy="90" rx="70" ry="22"/>
+    <ellipse cx="300" cy="78" rx="55" ry="18"/>
+    <ellipse cx="820" cy="60" rx="80" ry="20"/>
+    <ellipse cx="890" cy="72" rx="50" ry="15"/>
+    <ellipse cx="1290" cy="200" rx="60" ry="16"/>
+  </g>
+
+  <!-- Đồi phía xa -->
+  <path d="M0 330 Q 250 220 520 320 T 1050 300 T 1400 320 V 480 H 0 Z" fill="url(#hill)" opacity="0.7"/>
+  <path d="M0 360 Q 350 270 700 350 T 1400 340 V 480 H 0 Z" fill="#2668c5" opacity="0.8"/>
+
+  <!-- Biển báo bên đường -->
+  <g transform="translate(1080,255)">
+    <rect x="-5" y="0" width="10" height="105" rx="3" fill="#8d99ae"/>
+    <circle cx="0" cy="-20" r="44" fill="#fff"/>
+    <circle cx="0" cy="-20" r="38" fill="#e63946"/>
+    <circle cx="0" cy="-20" r="26" fill="#fff"/>
+    <text x="0" y="-8" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#1d3557">40</text>
+  </g>
+
+  <!-- Mặt đường -->
+  <rect y="380" width="1400" height="100" fill="url(#road)"/>
+  <g fill="#f7f7f7">
+    <rect x="40" y="425" width="90" height="10" rx="5"/>
+    <rect x="230" y="425" width="90" height="10" rx="5"/>
+    <rect x="420" y="425" width="90" height="10" rx="5"/>
+    <rect x="610" y="425" width="90" height="10" rx="5"/>
+    <rect x="800" y="425" width="90" height="10" rx="5"/>
+    <rect x="990" y="425" width="90" height="10" rx="5"/>
+    <rect x="1180" y="425" width="90" height="10" rx="5"/>
+  </g>
+
+  <!-- Người lái xe máy -->
+  <g transform="translate(360,290)">
+    <!-- bóng đổ -->
+    <ellipse cx="60" cy="118" rx="130" ry="14" fill="#0d1b2a" opacity="0.35"/>
+    <!-- thân xe -->
+    <path d="M-45 60 Q -25 30 15 38 L 75 38 Q 118 40 128 68 L 118 84 L -35 84 Z" fill="#e63946"/>
+    <path d="M-45 60 Q -25 30 15 38 L 30 38 L 18 84 L -35 84 Z" fill="#c1121f"/>
+    <!-- yếm trước, đèn -->
+    <path d="M118 52 L 150 62 L 142 84 L 118 84 Z" fill="#e63946"/>
+    <circle cx="146" cy="66" r="7" fill="#ffd166"/>
+    <!-- tay lái -->
+    <path d="M132 50 L 118 12" stroke="#33415c" stroke-width="8" stroke-linecap="round"/>
+    <rect x="106" y="2" width="26" height="10" rx="5" fill="#33415c"/>
+    <!-- bánh xe -->
+    <g>
+      <circle cx="-42" cy="98" r="34" fill="#1b263b"/>
+      <circle cx="-42" cy="98" r="18" fill="#415a77"/>
+      <circle cx="-42" cy="98" r="6" fill="#e0e1dd"/>
+    </g>
+    <g>
+      <circle cx="128" cy="98" r="34" fill="#1b263b"/>
+      <circle cx="128" cy="98" r="18" fill="#415a77"/>
+      <circle cx="128" cy="98" r="6" fill="#e0e1dd"/>
+    </g>
+    <!-- người lái -->
+    <g>
+      <!-- chân -->
+      <path d="M40 40 L 58 74 L 44 82" stroke="#1d3557" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- thân -->
+      <path d="M30 42 Q 40 -8 78 -14" stroke="#2a9d8f" stroke-width="22" fill="none" stroke-linecap="round"/>
+      <!-- tay -->
+      <path d="M70 -6 L 116 16" stroke="#2a9d8f" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <!-- đầu + mũ bảo hiểm -->
+      <circle cx="88" cy="-30" r="22" fill="#f4a261"/>
+      <path d="M64 -34 A 24 24 0 0 1 112 -34 L 112 -26 L 64 -26 Z" fill="#0a58ca"/>
+      <rect x="86" y="-38" width="28" height="10" rx="5" fill="#90e0ef" opacity="0.9"/>
+    </g>
+    <!-- vạch tốc độ -->
+    <g stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.7">
+      <path d="M-95 40 L -140 40"/>
+      <path d="M-85 62 L -150 62"/>
+      <path d="M-95 84 L -130 84"/>
+    </g>
+  </g>
+</svg>

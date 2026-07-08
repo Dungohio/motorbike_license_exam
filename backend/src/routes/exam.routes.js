@@ -4,6 +4,7 @@ const {
   submitExam,
   getHistory,
   getHistoryDetail,
+  getStats,
 } = require('../controllers/exam.controller');
 const { protect } = require('../middlewares/auth.middleware');
 
@@ -14,6 +15,7 @@ router.use(protect);
 
 router.post('/generate', generateExam);
 router.post('/submit', submitExam);
+router.get('/stats', getStats);
 router.get('/history', getHistory);
 router.get('/history/:id', getHistoryDetail);
 

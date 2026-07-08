@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Form, Card, Button, Badge, Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
 
 export default function ExamPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [classes, setClasses] = useState([]);
   const [licenseClass, setLicenseClass] = useState('');
 
@@ -17,9 +18,12 @@ export default function ExamPage() {
   useEffect(() => {
     api.get('/license-classes').then((res) => {
       setClasses(res.data);
-      if (res.data[0]) setLicenseClass(res.data[0]._id);
+      // Ưu tiên hạng bằng được chọn sẵn từ trang chủ (nút "Thi hạng X")
+      const preselected = location.state?.licenseClass;
+      if (preselected) setLicenseClass(preselected);
+      else if (res.data[0]) setLicenseClass(res.data[0]._id);
     });
-  }, []);
+  }, [location.state]);
 
   const startExam = async () => {
     const res = await api.post('/exams/generate', { licenseClass });

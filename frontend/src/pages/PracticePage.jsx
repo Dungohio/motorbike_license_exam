@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Form, Row, Col, Card, Button, Badge, Spinner } from 'react-bootstrap';
+import { Form, Row, Col, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 
 export default function PracticePage() {
+  const [searchParams] = useSearchParams();
+  const criticalMode = searchParams.get('critical') === 'true'; // vào từ mục "Ôn câu điểm liệt"
   const [classes, setClasses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [licenseClass, setLicenseClass] = useState('');
@@ -26,6 +29,7 @@ export default function PracticePage() {
     setSelected({});
     const params = { licenseClass };
     if (category) params.category = category;
+    if (criticalMode) params.critical = 'true';
     const res = await api.get('/practice', { params });
     setQuestions(res.data);
     setLoading(false);
@@ -35,7 +39,15 @@ export default function PracticePage() {
 
   return (
     <div>
-      <h3 className="text-brand mb-3">Ôn tập theo chủ đề</h3>
+      <h3 className="text-brand mb-3">
+        {criticalMode ? 'Ôn câu điểm liệt' : 'Ôn tập theo chủ đề'}
+      </h3>
+      {criticalMode && (
+        <Alert variant="danger" className="py-2">
+          ⚠️ Đây là các câu <strong>điểm liệt</strong> — sai một câu khi thi thật là trượt.
+          Hãy luyện đến khi đúng tuyệt đối!
+        </Alert>
+      )}
 
       <Card className="shadow-sm mb-4">
         <Card.Body>

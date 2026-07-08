@@ -117,4 +117,29 @@ const getHistoryDetail = asyncHandler(async (req, res) => {
   res.json(result);
 });
 
-module.exports = { generateExam, submitExam, getHistory, getHistoryDetail };
+// GET /api/exams/stats - thống kê học tập của chính user
+const getStats = asyncHandler(async (req, res) => {
+  const results = await ExamResult.find({ user: req.user._id })
+    .select('score total passed submittedAt createdAt')
+    .sort({ createdAt: -1 });
+
+  const attempts = results.length;
+  const passedCount = results.filter((r) => r.passed).length;
+  // Điểm trung bình tính theo % số câu đúng để so sánh được giữa các hạng
+  const avgScorePercent =
+    attempts === 0
+      ? 0
+      : Math.round(
+          (results.reduce((sum, r) => sum + r.score / r.total, 0) / attempts) * 100
+        );
+
+  res.json({
+    attempts,
+    passedCount,
+    passRate: attempts === 0 ? 0 : Math.round((passedCount / attempts) * 100),
+    avgScorePercent,
+    lastExamAt: attempts === 0 ? null : results[0].submittedAt || results[0].createdAt,
+  });
+});
+
+module.exports = { generateExam, submitExam, getHistory, getHistoryDetail, getStats };
