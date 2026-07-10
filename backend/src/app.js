@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth.routes');
@@ -15,6 +16,9 @@ const app = express();
 // Middleware chung
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }));
 app.use(express.json());
+
+// Cho phép truy cập ảnh đã upload (avatar...) qua /uploads/<tên file>
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Endpoint kiểm tra nhanh server sống hay không
 app.get('/api/health', (req, res) => {

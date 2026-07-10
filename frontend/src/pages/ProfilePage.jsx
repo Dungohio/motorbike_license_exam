@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,8 @@ export default function ProfilePage() {
   const [name, setName] = useState(user?.name || '');
   const [avatar, setAvatar] = useState(user?.avatar || 'avatar1');
   const [profileMsg, setProfileMsg] = useState(null); // {type, text}
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Đổi mật khẩu
   const [pw, setPw] = useState({ oldPassword: '', newPassword: '', confirm: '' });
@@ -32,6 +34,27 @@ export default function ProfilePage() {
       setProfileMsg({ type: 'success', text: 'Đã lưu thông tin cá nhân' });
     } catch (err) {
       setProfileMsg({ type: 'danger', text: err.response?.data?.message || 'Lưu thất bại' });
+    }
+  };
+
+  // Tải ảnh đại diện từ máy lên server
+  const handleAvatarFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setProfileMsg(null);
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      const res = await api.post('/users/me/avatar', formData);
+      updateUser(res.data.user);
+      setAvatar(res.data.user.avatar);
+      setProfileMsg({ type: 'success', text: 'Đã cập nhật ảnh đại diện' });
+    } catch (err) {
+      setProfileMsg({ type: 'danger', text: err.response?.data?.message || 'Tải ảnh thất bại' });
+    } finally {
+      setUploading(false);
+      e.target.value = ''; // cho phép chọn lại cùng một file
     }
   };
 
@@ -92,9 +115,26 @@ export default function ProfilePage() {
               {profileMsg && <Alert variant={profileMsg.type}>{profileMsg.text}</Alert>}
               <div className="d-flex align-items-center gap-3 mb-3">
                 <Avatar name={avatar} size={72} />
-                <div>
+                <div className="flex-grow-1">
                   <div className="fw-bold">{user?.name}</div>
                   <div className="small text-muted">{user?.email}</div>
+                </div>
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleAvatarFile}
+                    hidden
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    disabled={uploading}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {uploading ? 'Đang tải...' : '📷 Tải ảnh lên'}
+                  </Button>
                 </div>
               </div>
 

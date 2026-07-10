@@ -14,6 +14,20 @@ const VARIANTS = {
 export const AVATAR_NAMES = Object.keys(VARIANTS);
 
 export default function Avatar({ name = 'avatar1', size = 40, className = '' }) {
+  // Nếu là ảnh do người dùng upload (/uploads/...) hoặc URL thì hiện ảnh thật
+  if (name && (name.startsWith('/uploads/') || name.startsWith('http'))) {
+    return (
+      <img
+        src={name}
+        alt="avatar"
+        width={size}
+        height={size}
+        className={className}
+        style={{ borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+      />
+    );
+  }
+
   const v = VARIANTS[name] || VARIANTS.avatar1;
   return (
     <svg

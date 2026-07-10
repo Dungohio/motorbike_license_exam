@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-import heroImg from '../assets/hero.svg';
-import cardPractice from '../assets/card-practice.svg';
-import cardExam from '../assets/card-exam.svg';
+import heroImg from '../assets/hero.png';
+import cardPractice from '../assets/card-practice.png';
+import cardExam from '../assets/card-exam.png';
 import cardCritical from '../assets/card-critical.svg';
 import cardHistory from '../assets/card-history.svg';
 

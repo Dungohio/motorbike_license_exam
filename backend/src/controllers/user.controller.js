@@ -1,5 +1,8 @@
+const path = require('path');
+const fs = require('fs');
 const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
+const { UPLOAD_DIR } = require('../middlewares/upload.middleware');
 
 // PUT /api/users/me - sửa tên hiển thị và avatar
 const updateProfile = asyncHandler(async (req, res) => {
@@ -40,4 +43,26 @@ const changePassword = asyncHandler(async (req, res) => {
   res.json({ message: 'Đổi mật khẩu thành công' });
 });
 
-module.exports = { updateProfile, changePassword };
+// POST /api/users/me/avatar - upload ảnh đại diện từ máy (form-data, field 'avatar')
+const uploadAvatarImage = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'Vui lòng chọn file ảnh (field: avatar)' });
+  }
+
+  // Xóa ảnh upload cũ (nếu có) để không rác ổ đĩa
+  const current = req.user.avatar || '';
+  if (current.startsWith('/uploads/')) {
+    const oldPath = path.join(UPLOAD_DIR, path.basename(current));
+    fs.promises.unlink(oldPath).catch(() => {});
+  }
+
+  const avatarUrl = `/uploads/${req.file.filename}`;
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { avatar: avatarUrl },
+    { new: true }
+  );
+  res.json({ user });
+});
+
+module.exports = { updateProfile, changePassword, uploadAvatarImage };

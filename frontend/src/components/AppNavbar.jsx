@@ -2,6 +2,7 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Avatar from './Avatar';
+import logo from '../assets/logo.png';
 
 export default function AppNavbar() {
   const { user, logout } = useAuth();
@@ -15,8 +16,9 @@ export default function AppNavbar() {
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="mb-4 shadow-sm">
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          🏍️ Ôn thi bằng lái xe máy
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center gap-2">
+          <img src={logo} alt="Logo" className="brand-logo" />
+          Ôn thi bằng lái xe máy
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
