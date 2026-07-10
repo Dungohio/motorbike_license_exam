@@ -7,7 +7,7 @@ export default function AppFooter() {
       <Container className="py-4">
         <Row className="gy-3">
           <Col md={5}>
-            <div className="fw-bold fs-5 mb-1">🏍️ Ôn thi bằng lái xe máy</div>
+            <div className="fw-bold fs-5 mb-1"> Ôn thi bằng lái xe máy</div>
             <div className="small opacity-75">
               Nền tảng ôn luyện lý thuyết thi bằng lái xe máy các hạng A1, A2, A3
               theo bộ đề chuẩn Việt Nam.
