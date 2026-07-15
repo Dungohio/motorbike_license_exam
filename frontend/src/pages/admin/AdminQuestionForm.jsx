@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, Form, Button, Row, Col, InputGroup, Alert, Spinner } from 'react-bootstrap';
+import { Save, XLg, PlusLg, Trash, PencilSquare, Image } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 
@@ -29,7 +30,6 @@ export default function AdminQuestionForm() {
     Promise.all([api.get('/license-classes'), api.get('/categories')]).then(([l, c]) => {
       setClasses(l.data);
       setCategories(c.data);
-      // Đặt mặc định khi thêm mới
       if (!isEdit) {
         setForm((f) => ({
           ...f,
@@ -70,7 +70,7 @@ export default function AdminQuestionForm() {
   const removeOption = (idx) => {
     if (form.options.length <= 2) return;
     const options = form.options.filter((_, i) => i !== idx);
-    // Điều chỉnh lại correctIndex nếu cần
+    // Điều chỉnh lại correctIndex khi xóa đáp án
     let correctIndex = form.correctIndex;
     if (idx === correctIndex) correctIndex = 0;
     else if (idx < correctIndex) correctIndex -= 1;
@@ -80,6 +80,14 @@ export default function AdminQuestionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!form.content.trim()) {
+      setError('Vui lòng nhập nội dung câu hỏi');
+      return;
+    }
+    if (form.options.some((o) => !o.trim())) {
+      setError('Không được để trống đáp án nào');
+      return;
+    }
     try {
       if (isEdit) await api.put(`/questions/${id}`, form);
       else await api.post('/questions', form);
@@ -89,35 +97,32 @@ export default function AdminQuestionForm() {
     }
   };
 
-  if (loading) return <Spinner animation="border" />;
+  if (loading) {
+    return <div className="text-center py-5"><Spinner animation="border" /></div>;
+  }
 
   return (
     <div>
-      <h3 className="text-brand mb-3">{isEdit ? 'Sửa câu hỏi' : 'Thêm câu hỏi'}</h3>
-      <Card className="shadow-sm">
-        <Card.Body>
+      <h3 className="text-brand fw-bold mb-3">
+        {isEdit ? <><PencilSquare className="me-2" />Sửa câu hỏi</> : <><PlusLg className="me-2" />Thêm câu hỏi</>}
+      </h3>
+
+      <Card className="shadow-sm border-0" style={{ maxWidth: 860 }}>
+        <Card.Body className="p-4">
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Row className="g-3 mb-3">
               <Col md={6}>
-                <Form.Label>Hạng bằng</Form.Label>
-                <Form.Select
-                  value={form.licenseClass}
-                  onChange={(e) => setField('licenseClass', e.target.value)}
-                  required
-                >
+                <Form.Label className="small fw-semibold">Hạng bằng</Form.Label>
+                <Form.Select value={form.licenseClass} onChange={(e) => setField('licenseClass', e.target.value)} required>
                   {classes.map((c) => (
                     <option key={c._id} value={c._id}>Hạng {c.code}</option>
                   ))}
                 </Form.Select>
               </Col>
               <Col md={6}>
-                <Form.Label>Chủ đề</Form.Label>
-                <Form.Select
-                  value={form.category}
-                  onChange={(e) => setField('category', e.target.value)}
-                  required
-                >
+                <Form.Label className="small fw-semibold">Chủ đề</Form.Label>
+                <Form.Select value={form.category} onChange={(e) => setField('category', e.target.value)} required>
                   {categories.map((c) => (
                     <option key={c._id} value={c._id}>{c.name}</option>
                   ))}
@@ -126,7 +131,7 @@ export default function AdminQuestionForm() {
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Nội dung câu hỏi</Form.Label>
+              <Form.Label className="small fw-semibold">Nội dung câu hỏi</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={2}
@@ -137,43 +142,55 @@ export default function AdminQuestionForm() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Ảnh minh họa (URL, không bắt buộc)</Form.Label>
+              <Form.Label className="small fw-semibold">
+                <Image className="me-1" />Ảnh minh họa (URL, không bắt buộc)
+              </Form.Label>
               <Form.Control
                 value={form.imageUrl}
                 onChange={(e) => setField('imageUrl', e.target.value)}
-                placeholder="https://..."
+                placeholder="/images/signs/cam-nguoc-chieu.svg hoặc https://..."
               />
+              {form.imageUrl && (
+                <div className="mt-2">
+                  <img src={form.imageUrl} alt="xem trước" style={{ maxHeight: 100 }} />
+                </div>
+              )}
             </Form.Group>
 
-            <Form.Label>Các đáp án (chọn nút radio ở đáp án đúng)</Form.Label>
+            <Form.Label className="small fw-semibold">
+              Các đáp án — chọn nút tròn ở đáp án đúng
+            </Form.Label>
             {form.options.map((opt, idx) => (
               <InputGroup className="mb-2" key={idx}>
                 <InputGroup.Radio
                   name="correctIndex"
                   checked={form.correctIndex === idx}
                   onChange={() => setField('correctIndex', idx)}
+                  title="Đáp án đúng"
                 />
+                <InputGroup.Text className="fw-bold">{String.fromCharCode(65 + idx)}</InputGroup.Text>
                 <Form.Control
                   value={opt}
                   onChange={(e) => setOption(idx, e.target.value)}
-                  placeholder={`Đáp án ${String.fromCharCode(65 + idx)}`}
+                  placeholder={`Nội dung đáp án ${String.fromCharCode(65 + idx)}`}
                   required
                 />
                 <Button
                   variant="outline-danger"
                   onClick={() => removeOption(idx)}
                   disabled={form.options.length <= 2}
+                  title="Xóa đáp án"
                 >
-                  ✕
+                  <Trash />
                 </Button>
               </InputGroup>
             ))}
             <Button variant="outline-secondary" size="sm" className="mb-3" onClick={addOption}>
-              + Thêm đáp án
+              <PlusLg className="me-1" />Thêm đáp án
             </Button>
 
             <Form.Group className="mb-3">
-              <Form.Label>Giải thích đáp án (không bắt buộc)</Form.Label>
+              <Form.Label className="small fw-semibold">Giải thích đáp án (không bắt buộc)</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={2}
@@ -183,17 +200,20 @@ export default function AdminQuestionForm() {
             </Form.Group>
 
             <Form.Check
-              type="checkbox"
-              label="Đây là câu điểm liệt (sai là trượt)"
+              type="switch"
+              id="critical-switch"
+              label="Câu điểm liệt (trả lời sai là trượt bài thi)"
               checked={form.isCritical}
               onChange={(e) => setField('isCritical', e.target.checked)}
-              className="mb-3"
+              className="mb-4"
             />
 
             <div className="d-flex gap-2">
-              <Button type="submit" variant="primary">Lưu</Button>
+              <Button type="submit" variant="primary">
+                <Save className="me-2" />Lưu câu hỏi
+              </Button>
               <Button variant="outline-secondary" onClick={() => navigate('/admin/questions')}>
-                Hủy
+                <XLg className="me-1" />Hủy
               </Button>
             </div>
           </Form>

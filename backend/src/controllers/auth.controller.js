@@ -9,11 +9,22 @@ function signToken(user) {
   });
 }
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // POST /api/auth/register
 const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'Vui lòng nhập đủ tên, email và mật khẩu' });
+  }
+  if (name.trim().length < 2) {
+    return res.status(400).json({ message: 'Họ tên phải có ít nhất 2 ký tự' });
+  }
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ message: 'Email không đúng định dạng' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Mật khẩu phải có ít nhất 6 ký tự' });
   }
 
   const passwordHash = await User.hashPassword(password);

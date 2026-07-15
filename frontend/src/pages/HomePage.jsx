@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Row, Col, Card, Button, Table, Accordion, Badge } from 'react-bootstrap';
+import { ExclamationTriangleFill, LightbulbFill } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -180,7 +181,8 @@ export default function HomePage() {
                 </tbody>
               </Table>
               <div className="p-3 small text-muted">
-                ⚠️ Với mọi hạng: trả lời sai <strong>câu điểm liệt</strong> sẽ bị trượt
+                <ExclamationTriangleFill className="text-danger me-1" />
+                Với mọi hạng: trả lời sai <strong>câu điểm liệt</strong> sẽ bị trượt
                 dù tổng điểm vẫn đạt yêu cầu.
               </div>
             </Card.Body>
@@ -190,7 +192,9 @@ export default function HomePage() {
           <Accordion defaultActiveKey="0">
             {TIPS.map((tip, i) => (
               <Accordion.Item eventKey={String(i)} key={i}>
-                <Accordion.Header>💡 {tip.title}</Accordion.Header>
+                <Accordion.Header>
+                  <LightbulbFill className="text-warning me-2" />{tip.title}
+                </Accordion.Header>
                 <Accordion.Body className="small">{tip.body}</Accordion.Body>
               </Accordion.Item>
             ))}

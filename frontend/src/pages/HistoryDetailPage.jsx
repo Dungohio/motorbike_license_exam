@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Spinner, Button, Alert } from 'react-bootstrap';
+import { ArrowLeft } from 'react-bootstrap-icons';
 import api from '../api/axios';
 import ResultDetail from '../components/ResultDetail';
 
@@ -28,7 +29,7 @@ export default function HistoryDetailPage() {
           Chi tiết lần thi — Hạng {result.licenseClass?.code}
         </h3>
         <Button as={Link} to="/history" variant="outline-secondary" size="sm">
-          ← Quay lại
+          <ArrowLeft className="me-1" />Quay lại
         </Button>
       </div>
       <ResultDetail result={result} />

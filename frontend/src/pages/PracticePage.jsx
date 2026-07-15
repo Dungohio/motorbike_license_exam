@@ -1,20 +1,36 @@
 import { useEffect, useState } from 'react';
-import { Form, Row, Col, Card, Button, Badge, Spinner, Alert } from 'react-bootstrap';
+import { Form, Row, Col, Card, Button, Spinner, Alert, Nav } from 'react-bootstrap';
+import {
+  UiChecksGrid,
+  Stack,
+  JournalText,
+  ExclamationTriangleFill,
+  Search,
+} from 'react-bootstrap-icons';
 import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
+import QuizMode from '../components/practice/QuizMode';
+import FlashcardMode from '../components/practice/FlashcardMode';
+import DocumentMode from '../components/practice/DocumentMode';
+
+const MODES = [
+  { key: 'quiz', label: 'Trắc nghiệm', icon: UiChecksGrid },
+  { key: 'flashcard', label: 'Flashcard', icon: Stack },
+  { key: 'document', label: 'Tài liệu', icon: JournalText },
+];
 
 export default function PracticePage() {
   const [searchParams] = useSearchParams();
-  const criticalMode = searchParams.get('critical') === 'true'; // vào từ mục "Ôn câu điểm liệt"
+  const criticalOnly = searchParams.get('critical') === 'true';
+
   const [classes, setClasses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [licenseClass, setLicenseClass] = useState('');
   const [category, setCategory] = useState('');
-  const [questions, setQuestions] = useState([]);
-  const [selected, setSelected] = useState({}); // {questionId: chosenIndex}
+  const [mode, setMode] = useState('quiz');
+  const [questions, setQuestions] = useState(null); // null = chưa tải
   const [loading, setLoading] = useState(false);
 
-  // Tải danh sách hạng bằng và chủ đề khi mở trang
   useEffect(() => {
     api.get('/license-classes').then((res) => {
       setClasses(res.data);
@@ -23,37 +39,43 @@ export default function PracticePage() {
     api.get('/categories').then((res) => setCategories(res.data));
   }, []);
 
+  // Đổi giữa "Ôn tập" và "Câu điểm liệt" trên sidebar thì tải lại từ đầu
+  useEffect(() => {
+    setQuestions(null);
+  }, [criticalOnly]);
+
   const loadQuestions = async () => {
     if (!licenseClass) return;
     setLoading(true);
-    setSelected({});
     const params = { licenseClass };
     if (category) params.category = category;
-    if (criticalMode) params.critical = 'true';
+    if (criticalOnly) params.critical = 'true';
     const res = await api.get('/practice', { params });
     setQuestions(res.data);
     setLoading(false);
   };
 
-  const choose = (qId, idx) => setSelected({ ...selected, [qId]: idx });
+  const ModeComponent = { quiz: QuizMode, flashcard: FlashcardMode, document: DocumentMode }[mode];
 
   return (
     <div>
-      <h3 className="text-brand mb-3">
-        {criticalMode ? 'Ôn câu điểm liệt' : 'Ôn tập theo chủ đề'}
+      <h3 className="text-brand fw-bold mb-3">
+        {criticalOnly ? 'Ôn câu điểm liệt' : 'Ôn tập'}
       </h3>
-      {criticalMode && (
+
+      {criticalOnly && (
         <Alert variant="danger" className="py-2">
-          ⚠️ Đây là các câu <strong>điểm liệt</strong> — sai một câu khi thi thật là trượt.
-          Hãy luyện đến khi đúng tuyệt đối!
+          <ExclamationTriangleFill className="me-2" />
+          Sai một câu <strong>điểm liệt</strong> khi thi thật là trượt — hãy luyện đến khi đúng tuyệt đối!
         </Alert>
       )}
 
-      <Card className="shadow-sm mb-4">
+      {/* Bộ lọc + chọn chế độ */}
+      <Card className="shadow-sm border-0 mb-4">
         <Card.Body>
           <Row className="g-3 align-items-end">
             <Col md={4}>
-              <Form.Label>Hạng bằng</Form.Label>
+              <Form.Label className="small fw-semibold">Hạng bằng</Form.Label>
               <Form.Select value={licenseClass} onChange={(e) => setLicenseClass(e.target.value)}>
                 {classes.map((c) => (
                   <option key={c._id} value={c._id}>Hạng {c.code}</option>
@@ -61,67 +83,54 @@ export default function PracticePage() {
               </Form.Select>
             </Col>
             <Col md={4}>
-              <Form.Label>Chủ đề</Form.Label>
+              <Form.Label className="small fw-semibold">Chủ đề</Form.Label>
               <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="">-- Tất cả chủ đề --</option>
+                <option value="">Tất cả chủ đề</option>
                 {categories.map((c) => (
                   <option key={c._id} value={c._id}>{c.name}</option>
                 ))}
               </Form.Select>
             </Col>
             <Col md={4}>
-              <Button variant="primary" onClick={loadQuestions}>Xem câu hỏi</Button>
+              <Button variant="primary" onClick={loadQuestions} disabled={loading}>
+                <Search className="me-2" />
+                {loading ? 'Đang tải...' : 'Bắt đầu ôn'}
+              </Button>
             </Col>
           </Row>
+
+          <Nav variant="pills" className="mt-3 gap-2" activeKey={mode} onSelect={(k) => setMode(k)}>
+            {MODES.map((m) => {
+              const Icon = m.icon;
+              return (
+                <Nav.Item key={m.key}>
+                  <Nav.Link eventKey={m.key} className="d-flex align-items-center gap-2 py-1 px-3">
+                    <Icon size={15} />{m.label}
+                  </Nav.Link>
+                </Nav.Item>
+              );
+            })}
+          </Nav>
         </Card.Body>
       </Card>
 
-      {loading && <Spinner animation="border" />}
+      {loading && (
+        <div className="text-center py-5"><Spinner animation="border" /></div>
+      )}
 
-      {!loading && questions.map((q, i) => {
-        const chosen = selected[q._id];
-        const answered = chosen !== undefined;
-        return (
-          <Card key={q._id} className="shadow-sm mb-3">
-            <Card.Body>
-              <div className="d-flex justify-content-between">
-                <strong>Câu {i + 1}</strong>
-                {q.isCritical && <Badge bg="danger">Điểm liệt</Badge>}
-              </div>
-              <p className="mt-2">{q.content}</p>
-              {q.imageUrl && (
-                <img src={q.imageUrl} alt="minh họa" className="img-fluid mb-2" style={{ maxHeight: 180 }} />
-              )}
-              <div className="d-grid gap-2">
-                {q.options.map((opt, idx) => {
-                  let cls = '';
-                  if (answered && idx === q.correctIndex) cls = 'option-correct';
-                  else if (answered && idx === chosen) cls = 'option-wrong';
-                  return (
-                    <Button
-                      key={idx}
-                      variant="outline-secondary"
-                      className={`text-start ${cls}`}
-                      onClick={() => choose(q._id, idx)}
-                      disabled={answered}
-                    >
-                      {String.fromCharCode(65 + idx)}. {opt}
-                    </Button>
-                  );
-                })}
-              </div>
-              {answered && q.explanation && (
-                <div className="alert alert-info mt-3 mb-0">
-                  <strong>Giải thích:</strong> {q.explanation}
-                </div>
-              )}
-            </Card.Body>
-          </Card>
-        );
-      })}
+      {!loading && questions === null && (
+        <div className="text-center text-muted py-5">
+          <JournalText size={48} className="mb-3 opacity-50" />
+          <p>Chọn hạng bằng, chủ đề và bấm <strong>Bắt đầu ôn</strong> để tải câu hỏi.</p>
+        </div>
+      )}
 
-      {!loading && questions.length === 0 && (
-        <p className="text-muted">Chọn hạng bằng và bấm “Xem câu hỏi” để bắt đầu ôn tập.</p>
+      {!loading && questions !== null && questions.length === 0 && (
+        <Alert variant="warning">Không có câu hỏi nào khớp bộ lọc này.</Alert>
+      )}
+
+      {!loading && questions !== null && questions.length > 0 && (
+        <ModeComponent questions={questions} key={`${mode}-${questions.length}`} />
       )}
     </div>
   );

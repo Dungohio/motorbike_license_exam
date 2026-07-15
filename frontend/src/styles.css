@@ -150,6 +150,321 @@ body {
   border-color: var(--bs-primary);
 }
 
+/* ===== Layout sidebar ===== */
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  background: linear-gradient(180deg, #0a58ca, #083b8c);
+  color: #fff;
+  z-index: 1030;
+}
+
+.app-sidebar-offcanvas {
+  width: 260px !important;
+  background: linear-gradient(180deg, #0a58ca, #083b8c);
+  color: #fff;
+}
+
+.app-content {
+  min-height: 100vh;
+}
+
+@media (min-width: 992px) {
+  .app-content {
+    margin-left: 250px;
+  }
+}
+
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(90deg, #0a58ca, #0d6efd);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 1.2rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  line-height: 1.2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-brand img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: contain;
+}
+
+.sidebar-nav {
+  padding: 0.75rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.55rem;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-size: 0.94rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: #fff;
+  color: #0a58ca;
+  font-weight: 600;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-logout {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  display: flex;
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* ===== Trang đăng nhập / đăng ký ===== */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+}
+
+.auth-side {
+  flex: 1;
+  position: relative;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .auth-side {
+    display: block;
+  }
+}
+
+.auth-side img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.auth-side-caption {
+  position: absolute;
+  left: 3rem;
+  bottom: 3rem;
+  right: 3rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(10, 40, 90, 0.55);
+}
+
+.auth-form-col {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+  background: #fff;
+}
+
+/* ===== Trang thi: lưới số câu ===== */
+.qnum-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.qnum-btn {
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+  border: 1.5px solid #ced4da;
+  background: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #495057;
+  position: relative;
+}
+
+.qnum-btn.answered {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.qnum-btn.current {
+  outline: 3px solid #9ec5fe;
+  outline-offset: 1px;
+}
+
+.qnum-btn.critical::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #dc3545;
+}
+
+/* Đáp án dạng nút lớn trong bài thi / ôn tập */
+.answer-option {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #dee2e6;
+  border-radius: 0.6rem;
+  background: #fff;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.answer-option:hover:not(:disabled) {
+  border-color: #0d6efd;
+  background: #f5f9ff;
+}
+
+.answer-option.selected {
+  border-color: #0d6efd;
+  background: #e7f1ff;
+}
+
+.answer-option.correct {
+  border-color: #198754;
+  background: #d1e7dd;
+}
+
+.answer-option.wrong {
+  border-color: #dc3545;
+  background: #f8d7da;
+}
+
+.answer-letter {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.answer-option.selected .answer-letter,
+.answer-option.correct .answer-letter {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.answer-option.correct .answer-letter {
+  background: #198754;
+}
+
+.answer-option.wrong .answer-letter {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* ===== Flashcard ===== */
+.flashcard-scene {
+  perspective: 1200px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.flashcard {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 0.5rem 1.5rem rgba(13, 110, 253, 0.15);
+}
+
+.flashcard-front {
+  background: #fff;
+  border: 2px solid #cfe2ff;
+}
+
+.flashcard-back {
+  background: linear-gradient(160deg, #e7f1ff, #ffffff);
+  border: 2px solid #0d6efd;
+  transform: rotateY(180deg);
+}
+
+/* Ảnh minh họa câu hỏi (biển báo...) */
+.question-image {
+  max-height: 170px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 /* ===== Footer ===== */
 .app-footer {
   background: linear-gradient(135deg, #0a58ca, #083b8c);

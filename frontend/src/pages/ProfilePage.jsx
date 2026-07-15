@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Camera, PersonCircle, KeyFill, Save } from 'react-bootstrap-icons';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import Avatar, { AVATAR_NAMES } from '../components/Avatar';
@@ -110,7 +111,9 @@ export default function ProfilePage() {
         {/* ===== Thông tin cá nhân + avatar ===== */}
         <Col lg={6}>
           <Card className="shadow-sm border-0 h-100">
-            <Card.Header className="bg-white fw-bold">Thông tin cá nhân</Card.Header>
+            <Card.Header className="bg-white fw-bold">
+              <PersonCircle className="me-2" />Thông tin cá nhân
+            </Card.Header>
             <Card.Body>
               {profileMsg && <Alert variant={profileMsg.type}>{profileMsg.text}</Alert>}
               <div className="d-flex align-items-center gap-3 mb-3">
@@ -133,7 +136,8 @@ export default function ProfilePage() {
                     disabled={uploading}
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    {uploading ? 'Đang tải...' : '📷 Tải ảnh lên'}
+                    <Camera className="me-1" />
+                    {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
                   </Button>
                 </div>
               </div>
@@ -159,7 +163,9 @@ export default function ProfilePage() {
                   ))}
                 </div>
 
-                <Button type="submit" variant="primary">Lưu thay đổi</Button>
+                <Button type="submit" variant="primary">
+                  <Save className="me-2" />Lưu thay đổi
+                </Button>
               </Form>
             </Card.Body>
           </Card>
@@ -168,7 +174,9 @@ export default function ProfilePage() {
         {/* ===== Đổi mật khẩu ===== */}
         <Col lg={6}>
           <Card className="shadow-sm border-0 h-100">
-            <Card.Header className="bg-white fw-bold">Đổi mật khẩu</Card.Header>
+            <Card.Header className="bg-white fw-bold">
+              <KeyFill className="me-2" />Đổi mật khẩu
+            </Card.Header>
             <Card.Body>
               {pwMsg && <Alert variant={pwMsg.type}>{pwMsg.text}</Alert>}
               <Form onSubmit={changePassword}>
