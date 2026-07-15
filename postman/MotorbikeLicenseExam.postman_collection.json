@@ -207,6 +207,20 @@
           }
         },
         {
+          "name": "Upload question image (form-data)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/questions/upload-image", "host": ["{{baseUrl}}"], "path": ["questions", "upload-image"] },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "image", "type": "file", "src": "" }
+              ]
+            }
+          }
+        },
+        {
           "name": "Create question",
           "request": {
             "method": "POST",

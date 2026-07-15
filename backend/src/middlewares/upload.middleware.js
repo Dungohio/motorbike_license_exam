@@ -8,24 +8,31 @@ if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  filename: (req, file, cb) => {
-    // Tên file: avatar-<userId>-<timestamp>.<đuôi gốc>
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `avatar-${req.user._id}-${Date.now()}${ext}`);
-  },
-});
+// Chỉ nhận file ảnh, tối đa 2MB — dùng chung cho avatar và ảnh câu hỏi
+const imageFileFilter = (req, file, cb) => {
+  const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
+  if (allowed.includes(file.mimetype)) cb(null, true);
+  else cb(new Error('Chỉ chấp nhận file ảnh (jpg, png, webp, gif, svg)'));
+};
 
-// Chỉ nhận file ảnh, tối đa 2MB
-const uploadAvatar = multer({
-  storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    if (allowed.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('Chỉ chấp nhận file ảnh (jpg, png, webp, gif)'));
-  },
-}).single('avatar');
+// Tạo middleware upload 1 ảnh với tiền tố tên file cho trước
+function makeImageUploader(prefix, field) {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, UPLOAD_DIR),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      const owner = req.user ? `-${req.user._id}` : '';
+      cb(null, `${prefix}${owner}-${Date.now()}${ext}`);
+    },
+  });
+  return multer({
+    storage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: imageFileFilter,
+  }).single(field);
+}
 
-module.exports = { uploadAvatar, UPLOAD_DIR };
+const uploadAvatar = makeImageUploader('avatar', 'avatar');
+const uploadQuestionImage = makeImageUploader('question', 'image');
+
+module.exports = { uploadAvatar, uploadQuestionImage, UPLOAD_DIR };

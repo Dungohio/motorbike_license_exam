@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card, Form, Button, Row, Col, InputGroup, Alert, Spinner } from 'react-bootstrap';
-import { Save, XLg, PlusLg, Trash, PencilSquare, Image } from 'react-bootstrap-icons';
+import { Save, XLg, PlusLg, Trash, PencilSquare, Image, Upload } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 
@@ -25,6 +25,8 @@ export default function AdminQuestionForm() {
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(isEdit);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     Promise.all([api.get('/license-classes'), api.get('/categories')]).then(([l, c]) => {
@@ -75,6 +77,25 @@ export default function AdminQuestionForm() {
     if (idx === correctIndex) correctIndex = 0;
     else if (idx < correctIndex) correctIndex -= 1;
     setForm((f) => ({ ...f, options, correctIndex }));
+  };
+
+  // Upload ảnh minh họa từ máy -> server trả URL gắn vào imageUrl
+  const handleImageFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError('');
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await api.post('/questions/upload-image', formData);
+      setField('imageUrl', res.data.url);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Tải ảnh thất bại');
+    } finally {
+      setUploading(false);
+      e.target.value = ''; // cho phép chọn lại cùng file
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -143,18 +164,45 @@ export default function AdminQuestionForm() {
 
             <Form.Group className="mb-3">
               <Form.Label className="small fw-semibold">
-                <Image className="me-1" />Ảnh minh họa (URL, không bắt buộc)
+                <Image className="me-1" />Ảnh minh họa (không bắt buộc)
               </Form.Label>
-              <Form.Control
-                value={form.imageUrl}
-                onChange={(e) => setField('imageUrl', e.target.value)}
-                placeholder="/images/signs/cam-nguoc-chieu.svg hoặc https://..."
-              />
-              {form.imageUrl && (
-                <div className="mt-2">
-                  <img src={form.imageUrl} alt="xem trước" style={{ maxHeight: 100 }} />
-                </div>
-              )}
+              <div className="d-flex align-items-center gap-3 flex-wrap">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageFile}
+                  hidden
+                />
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  disabled={uploading}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload className="me-2" />
+                  {uploading ? 'Đang tải...' : form.imageUrl ? 'Đổi ảnh khác' : 'Tải ảnh từ máy'}
+                </Button>
+                {form.imageUrl && (
+                  <>
+                    <img
+                      src={form.imageUrl}
+                      alt="xem trước"
+                      style={{ maxHeight: 90 }}
+                      className="border rounded p-1 bg-white"
+                    />
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      title="Gỡ ảnh"
+                      onClick={() => setField('imageUrl', '')}
+                    >
+                      <Trash />
+                    </Button>
+                  </>
+                )}
+              </div>
+              <Form.Text muted>Ảnh biển báo/sa hình, tối đa 2MB (jpg, png, webp, gif, svg).</Form.Text>
             </Form.Group>
 
             <Form.Label className="small fw-semibold">

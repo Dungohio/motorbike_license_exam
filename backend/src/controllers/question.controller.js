@@ -64,10 +64,20 @@ const deleteQuestion = asyncHandler(async (req, res) => {
   res.json({ message: 'Đã xóa câu hỏi' });
 });
 
+// POST /api/questions/upload-image (admin) - upload ảnh minh họa câu hỏi
+// (form-data, field 'image'), trả về URL để gắn vào imageUrl
+const uploadImage = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'Vui lòng chọn file ảnh (field: image)' });
+  }
+  res.status(201).json({ url: `/uploads/${req.file.filename}` });
+});
+
 module.exports = {
   getQuestions,
   getQuestionById,
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  uploadImage,
 };
