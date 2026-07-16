@@ -1,0 +1,11 @@
+$kind: http-request
+description: |-
+  Lấy thông tin tài khoản đang đăng nhập (theo token).
+
+  **Trả về:** object user hiện tại (không có passwordHash).
+url: "{{baseUrl}}/auth/me"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/Me 🔒.resources/examples
+order: 4000

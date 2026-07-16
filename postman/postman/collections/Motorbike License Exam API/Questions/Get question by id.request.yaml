@@ -1,0 +1,13 @@
+$kind: http-request
+description: |-
+  Chi tiết một câu hỏi (chỉ admin).
+
+  **Trả về:** câu hỏi đầy đủ kèm đáp án đúng + giải thích.
+url: "{{baseUrl}}/questions/:id"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+examples: ./.resources/Get question by id.resources/examples
+order: 2000

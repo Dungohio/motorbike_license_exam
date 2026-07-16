@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:id/role"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  pathVariables:
+    id: ""
+  body:
+    type: text
+    content: |-
+      {
+        "role": "admin"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "user": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Người dùng mẫu",
+          "email": "user@example.com",
+          "role": "admin",
+          "avatar": "avatar1",
+          "isLocked": false,
+          "createdAt": "2026-07-09T03:00:00.000Z",
+          "updatedAt": "2026-07-09T03:00:00.000Z"
+        }
+      }
+order: 1000

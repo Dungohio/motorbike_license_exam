@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Câu hỏi để ôn tập: bắt buộc `licenseClass`; tùy chọn lọc `category` và `critical=true` (chỉ câu điểm liệt).
+
+  **Trả về:** mảng câu hỏi KÈM đáp án đúng + giải thích (dùng cho chế độ học).
+url: "{{baseUrl}}/practice?licenseClass=<licenseClassId>"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  - key: licenseClass
+    value: <licenseClassId>
+  - key: category
+    value: ""
+    disabled: true
+  - key: critical
+    value: "true"
+    disabled: true
+examples: ./.resources/Practice questions.resources/examples
+order: 1000

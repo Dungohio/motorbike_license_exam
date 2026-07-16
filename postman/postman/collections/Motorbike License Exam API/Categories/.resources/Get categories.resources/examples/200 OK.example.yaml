@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/categories"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Biển báo giao thông",
+          "slug": "bien-bao-giao-thong",
+          "description": "Nhận biết ý nghĩa các biển báo hiệu đường bộ."
+        }
+      ]
+order: 1000

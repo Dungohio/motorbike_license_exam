@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Sửa tên hiển thị và avatar của chính mình. Avatar là tên trong bộ có sẵn (avatar1..avatar8) hoặc URL ảnh đã upload.
+
+  **Trả về:** user sau khi cập nhật.
+url: "{{baseUrl}}/users/me"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "name": "Tên mới",
+      "avatar": "avatar3"
+    }
+examples: ./.resources/Update profile (name, avatar).resources/examples
+order: 1000

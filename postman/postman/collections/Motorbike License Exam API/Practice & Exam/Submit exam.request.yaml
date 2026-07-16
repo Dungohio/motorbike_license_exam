@@ -1,0 +1,28 @@
+$kind: http-request
+description: |-
+  Nộp bài thi — server tự chấm điểm.
+
+  **Luật:** đậu khi đúng ≥ passScore VÀ không sai câu điểm liệt nào (sai điểm liệt → failedByCritical=true → trượt dù đủ điểm). `selectedIndex: null` = bỏ trống.
+
+  **Trả về:** kết quả chi tiết từng câu (kèm đáp án đúng + giải thích) và được lưu vào lịch sử.
+url: "{{baseUrl}}/exams/submit"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "licenseClass": "<licenseClassId>",
+      "startedAt": "2026-07-16T02:00:00.000Z",
+      "durationSeconds": 540,
+      "answers": [
+        {
+          "question": "<questionId>",
+          "selectedIndex": 0
+        }
+      ]
+    }
+examples: ./.resources/Submit exam.resources/examples
+order: 3000

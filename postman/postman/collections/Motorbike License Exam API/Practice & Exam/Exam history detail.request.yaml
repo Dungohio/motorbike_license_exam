@@ -1,0 +1,13 @@
+$kind: http-request
+description: |-
+  Chi tiết một lần thi (chỉ xem được bài của chính mình).
+
+  **Trả về:** kết quả đầy đủ kèm snapshot từng câu, đáp án đã chọn, đáp án đúng, giải thích.
+url: "{{baseUrl}}/exams/history/:id"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+examples: ./.resources/Exam history detail.resources/examples
+order: 6000

@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  Danh sách câu hỏi (chỉ admin): lọc theo hạng bằng, chủ đề + phân trang.
+
+  **Trả về:** items (câu hỏi CÓ đáp án đúng), total, page, totalPages.
+url: "{{baseUrl}}/questions?page=1&limit=10"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  - key: page
+    value: "1"
+  - key: limit
+    value: "10"
+  - key: licenseClass
+    value: ""
+    disabled: true
+  - key: category
+    value: ""
+    disabled: true
+examples: ./.resources/List questions.resources/examples
+order: 1000

@@ -1,0 +1,46 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/questions/:id"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  pathVariables:
+    id: ""
+  body:
+    type: text
+    content: |-
+      {
+        "content": "Nội dung câu hỏi đã sửa"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+        "licenseClass": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "code": "A1"
+        },
+        "category": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Biển báo giao thông",
+          "slug": "bien-bao-giao-thong"
+        },
+        "content": "Nội dung câu hỏi đã sửa",
+        "imageUrl": "/images/signs/cam-nguoc-chieu.svg",
+        "options": [
+          "Cấm đi ngược chiều.",
+          "Cấm dừng xe và đỗ xe.",
+          "Đường một chiều được phép đi."
+        ],
+        "correctIndex": 0,
+        "explanation": "Biển tròn nền đỏ, vạch trắng nằm ngang là biển \"Cấm đi ngược chiều\" (P.102).",
+        "isCritical": false
+      }
+order: 1000

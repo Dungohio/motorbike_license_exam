@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Sửa tên/mô tả chủ đề (chỉ admin).
+
+  **Trả về:** chủ đề sau khi sửa.
+url: "{{baseUrl}}/categories/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+body:
+  type: text
+  content: |-
+    {
+      "name": "Tên chủ đề mới"
+    }
+examples: ./.resources/Update category 👑.resources/examples
+order: 3000

@@ -1,0 +1,13 @@
+$kind: http-request
+description: |-
+  Xóa câu hỏi (chỉ admin).
+
+  **Trả về:** thông báo đã xóa.
+url: "{{baseUrl}}/questions/:id"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+examples: ./.resources/Delete question.resources/examples
+order: 6000

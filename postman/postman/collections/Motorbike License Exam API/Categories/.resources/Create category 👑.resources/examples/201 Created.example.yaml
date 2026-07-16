@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/categories"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: text
+    content: |-
+      {
+        "name": "Kỹ thuật lái xe",
+        "description": "Câu hỏi về kỹ thuật lái xe an toàn"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+        "name": "Kỹ thuật lái xe",
+        "slug": "ky-thuat-lai-xe",
+        "description": "Nhận biết ý nghĩa các biển báo hiệu đường bộ."
+      }
+order: 1000

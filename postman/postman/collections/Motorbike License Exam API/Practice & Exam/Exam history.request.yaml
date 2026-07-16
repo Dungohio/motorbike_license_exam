@@ -1,0 +1,11 @@
+$kind: http-request
+description: |-
+  Danh sách các lần thi của chính mình (mới nhất trước), dạng gọn không kèm chi tiết từng câu.
+
+  **Trả về:** mảng kết quả thi.
+url: "{{baseUrl}}/exams/history"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/Exam history.resources/examples
+order: 5000

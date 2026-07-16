@@ -1,4 +1,10 @@
 $kind: http-request
+description: |-
+  Đăng ký tài khoản mới (role mặc định: user).
+
+  **Validate:** tên ≥2 ký tự, email đúng định dạng, mật khẩu ≥6 ký tự, email chưa tồn tại.
+
+  **Trả về:** thông tin user vừa tạo + JWT token.
 url: "{{baseUrl}}/auth/register"
 method: POST
 headers:
@@ -11,4 +17,5 @@ body:
       "email": "newuser@example.com",
       "password": "123456"
     }
+examples: ./.resources/Register.resources/examples
 order: 1000

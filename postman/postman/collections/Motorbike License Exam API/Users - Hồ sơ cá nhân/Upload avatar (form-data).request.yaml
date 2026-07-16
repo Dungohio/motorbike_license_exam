@@ -1,0 +1,18 @@
+$kind: http-request
+description: |-
+  Upload ảnh đại diện từ máy (form-data, field `avatar`). Chỉ nhận ảnh jpg/png/webp/gif/svg, tối đa 2MB. Ảnh cũ đã upload sẽ tự bị xóa.
+
+  **Trả về:** user với avatar là URL /uploads/...
+url: "{{baseUrl}}/users/me/avatar"
+method: POST
+headers:
+  Authorization: Bearer {{token}}
+body:
+  type: formdata
+  content:
+    - type: file
+      key: avatar
+      src:
+        - ""
+examples: ./.resources/Upload avatar (form-data).resources/examples
+order: 3000

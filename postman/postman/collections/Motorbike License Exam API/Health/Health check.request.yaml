@@ -1,0 +1,9 @@
+$kind: http-request
+description: |-
+  Kiểm tra server còn sống không. Không cần đăng nhập.
+
+  **Trả về:** trạng thái hoạt động của API.
+url: "{{baseUrl}}/health"
+method: GET
+examples: ./.resources/Health check.resources/examples
+order: 1000

@@ -1,0 +1,42 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users?page=1&limit=10"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+  queryParams:
+    - key: page
+      value: "1"
+    - key: limit
+      value: "10"
+    - key: search
+      value: ""
+      disabled: true
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "items": [
+          {
+            "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+            "name": "Người dùng mẫu",
+            "email": "user@example.com",
+            "role": "user",
+            "avatar": "avatar1",
+            "isLocked": false,
+            "createdAt": "2026-07-09T03:00:00.000Z",
+            "updatedAt": "2026-07-09T03:00:00.000Z",
+            "examAttempts": 3
+          }
+        ],
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 1
+      }
+order: 1000

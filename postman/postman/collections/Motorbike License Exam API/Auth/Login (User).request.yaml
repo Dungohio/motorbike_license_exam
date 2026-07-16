@@ -1,4 +1,5 @@
 $kind: http-request
+description: Đăng nhập bằng tài khoản user thường (tạo sẵn khi seed). Token tự lưu vào {{token}}.
 url: "{{baseUrl}}/auth/login"
 method: POST
 headers:
@@ -16,4 +17,5 @@ scripts:
       var data = pm.response.json();
       if (data.token) { pm.environment.set('token', data.token); }
     language: text/javascript
+examples: ./.resources/Login (User).resources/examples
 order: 3000

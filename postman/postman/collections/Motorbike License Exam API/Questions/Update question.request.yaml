@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Sửa câu hỏi (chỉ admin) — gửi các field cần đổi.
+
+  **Trả về:** câu hỏi sau khi sửa.
+url: "{{baseUrl}}/questions/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+body:
+  type: text
+  content: |-
+    {
+      "content": "Nội dung câu hỏi đã sửa"
+    }
+examples: ./.resources/Update question.resources/examples
+order: 5000

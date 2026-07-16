@@ -1,4 +1,10 @@
 $kind: http-request
+description: |-
+  Đăng nhập bằng tài khoản admin (tạo sẵn khi seed).
+
+  **Token trả về được tự lưu vào biến {{token}}** nhờ script ở tab Scripts.
+
+  **Trả về:** thông tin user + JWT token. Tài khoản bị khóa sẽ nhận 403.
 url: "{{baseUrl}}/auth/login"
 method: POST
 headers:
@@ -16,4 +22,5 @@ scripts:
       var data = pm.response.json();
       if (data.token) { pm.environment.set('token', data.token); }
     language: text/javascript
+examples: ./.resources/Login (Admin).resources/examples
 order: 2000

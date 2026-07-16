@@ -1,0 +1,14 @@
+$kind: http-request
+name: Lock/unlock user
+description: |-
+  Đảo trạng thái khóa của tài khoản (chỉ admin). User bị khóa không đăng nhập được (403). Không thể tự khóa chính mình.
+
+  **Trả về:** user với isLocked mới.
+url: "{{baseUrl}}/users/:id/lock"
+method: PUT
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+examples: ./.resources/Lock-unlock user.resources/examples
+order: 3000

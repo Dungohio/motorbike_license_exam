@@ -1,0 +1,18 @@
+$kind: http-request
+description: |-
+  Tạo đề thi ngẫu nhiên theo cấu hình hạng bằng (A1: 25 câu/19 phút).
+
+  **Trả về:** thông tin hạng + config + danh sách câu hỏi **KHÔNG có correctIndex/explanation** (chống lộ đáp án — chấm điểm ở server khi submit).
+url: "{{baseUrl}}/exams/generate"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "licenseClass": "<licenseClassId>"
+    }
+examples: ./.resources/Generate exam.resources/examples
+order: 2000

@@ -1,0 +1,48 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/exams/history/:id"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+  pathVariables:
+    id: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+        "user": "665f1a2b3c4d5e6f7a8b9c0d",
+        "licenseClass": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "code": "A1",
+          "name": "Hạng A1"
+        },
+        "answers": [
+          {
+            "question": "665f1a2b3c4d5e6f7a8b9c0d",
+            "content": "Biển báo trong hình có ý nghĩa gì?",
+            "options": [
+              "Cấm đi ngược chiều.",
+              "Cấm dừng xe và đỗ xe."
+            ],
+            "selectedIndex": 0,
+            "correctIndex": 0,
+            "isCorrect": true,
+            "isCritical": false,
+            "explanation": "Biển \"Cấm đi ngược chiều\" (P.102)."
+          }
+        ],
+        "score": 23,
+        "total": 25,
+        "passed": true,
+        "failedByCritical": false,
+        "durationSeconds": 540,
+        "startedAt": "2026-07-16T02:00:00.000Z",
+        "submittedAt": "2026-07-16T02:09:00.000Z"
+      }
+order: 1000

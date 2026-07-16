@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Danh sách tài khoản (chỉ admin). `search` tìm theo tên hoặc email, có phân trang.
+
+  **Trả về:** items (kèm số lần thi `examAttempts` của mỗi user), total, page, totalPages.
+url: "{{baseUrl}}/users?page=1&limit=10"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  - key: page
+    value: "1"
+  - key: limit
+    value: "10"
+  - key: search
+    value: ""
+    disabled: true
+examples: ./.resources/List users.resources/examples
+order: 1000

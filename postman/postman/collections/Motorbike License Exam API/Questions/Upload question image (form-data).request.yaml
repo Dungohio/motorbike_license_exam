@@ -1,0 +1,18 @@
+$kind: http-request
+description: |-
+  Upload ảnh minh họa câu hỏi từ máy (chỉ admin; form-data, field `image`, ảnh ≤2MB).
+
+  **Trả về:** URL ảnh để gắn vào field imageUrl khi tạo/sửa câu hỏi.
+url: "{{baseUrl}}/questions/upload-image"
+method: POST
+headers:
+  Authorization: Bearer {{token}}
+body:
+  type: formdata
+  content:
+    - type: file
+      key: image
+      src:
+        - ""
+examples: ./.resources/Upload question image (form-data).resources/examples
+order: 3000

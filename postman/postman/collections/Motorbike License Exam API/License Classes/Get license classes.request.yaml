@@ -1,4 +1,9 @@
 $kind: http-request
+description: |-
+  Danh sách hạng bằng (A1, A2, A3) kèm cấu hình đề thi từng hạng. Không cần đăng nhập.
+
+  **Trả về:** mảng hạng bằng — lấy `_id` ở đây để dùng cho các request cần `licenseClass`.
 url: "{{baseUrl}}/license-classes"
 method: GET
+examples: ./.resources/Get license classes.resources/examples
 order: 1000

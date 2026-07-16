@@ -1,0 +1,26 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/license-classes"
+  method: GET
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      [
+        {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "code": "A1",
+          "name": "Hạng A1 - Xe mô tô hai bánh 50cc đến dưới 175cc",
+          "description": "Dành cho xe mô tô hai bánh có dung tích xi-lanh từ 50cc đến dưới 175cc.",
+          "examConfig": {
+            "numQuestions": 25,
+            "durationMinutes": 19,
+            "passScore": 21
+          }
+        }
+      ]
+order: 1000

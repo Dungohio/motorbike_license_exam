@@ -3,7 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { PersonPlus, Envelope, Lock, Person, ShieldLock } from 'react-bootstrap-icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import heroImg from '../assets/hero.png';
+import authBanner from '../assets/auth-banner.png';
 import logo from '../assets/logo.png';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,7 +61,7 @@ export default function RegisterPage() {
   return (
     <div className="auth-page">
       <div className="auth-side">
-        <img src={heroImg} alt="Ôn thi bằng lái xe máy" />
+        <img src={authBanner} alt="Ôn thi bằng lái xe máy" />
         <div className="auth-side-caption">
           <h2 className="fw-bold">Bắt đầu hành trình lấy bằng của bạn</h2>
           <p className="mb-0">Tạo tài khoản miễn phí để ôn tập và thi thử không giới hạn.</p>

@@ -1,2 +1,9 @@
 $kind: collection
-description: Bộ API test cho web ôn thi bằng lái xe máy (Express + Mongoose). Đăng nhập trước để tự lưu token vào biến {{token}}.
+description: |-
+  Bộ test đầy đủ mọi API của web ôn thi bằng lái xe máy (Express + Mongoose).
+
+  **Cách dùng:**
+  1. Chọn environment "Motorbike License Exam - Local" (baseUrl = http://localhost:5000/api).
+  2. Gọi **Auth → Login (Admin)** hoặc **Login (User)** trước — token tự lưu vào biến {{token}}.
+  3. Các request có 🔒 cần đăng nhập, 👑 cần quyền admin.
+  4. Mỗi request đều có sẵn **ví dụ response** (tab Examples) để biết URL đó trả về gì.

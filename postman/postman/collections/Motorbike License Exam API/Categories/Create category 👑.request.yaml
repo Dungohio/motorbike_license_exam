@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Thêm chủ đề mới (chỉ admin). Slug tự sinh từ tên.
+
+  **Trả về:** chủ đề vừa tạo.
+url: "{{baseUrl}}/categories"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "name": "Kỹ thuật lái xe",
+      "description": "Câu hỏi về kỹ thuật lái xe an toàn"
+    }
+examples: ./.resources/Create category 👑.resources/examples
+order: 2000

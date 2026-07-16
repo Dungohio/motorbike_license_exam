@@ -1,0 +1,29 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:id/lock"
+  method: PUT
+  headers:
+    Authorization: Bearer {{token}}
+  pathVariables:
+    id: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "user": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Người dùng mẫu",
+          "email": "user@example.com",
+          "role": "user",
+          "avatar": "avatar1",
+          "isLocked": true,
+          "createdAt": "2026-07-09T03:00:00.000Z",
+          "updatedAt": "2026-07-09T03:00:00.000Z"
+        }
+      }
+order: 1000

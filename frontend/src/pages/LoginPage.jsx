@@ -3,7 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { BoxArrowInRight, Envelope, Lock } from 'react-bootstrap-icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import heroImg from '../assets/hero.png';
+import authBanner from '../assets/auth-banner.png';
 import logo from '../assets/logo.png';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,7 +53,7 @@ export default function LoginPage() {
     <div className="auth-page">
       {/* Ảnh minh họa bên trái (ẩn trên mobile) */}
       <div className="auth-side">
-        <img src={heroImg} alt="Ôn thi bằng lái xe máy" />
+        <img src={authBanner} alt="Ôn thi bằng lái xe máy" />
         <div className="auth-side-caption">
           <h2 className="fw-bold">Tự tin thi đậu lý thuyết bằng lái xe máy</h2>
           <p className="mb-0">Ôn luyện theo bộ đề chuẩn Việt Nam — mọi lúc, mọi nơi.</p>

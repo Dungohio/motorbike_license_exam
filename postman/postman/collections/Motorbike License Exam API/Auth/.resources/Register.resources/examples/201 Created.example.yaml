@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "name": "Nguyen Van A",
+        "email": "newuser@example.com",
+        "password": "123456"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "user": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Nguyen Van A",
+          "email": "newuser@example.com",
+          "role": "user",
+          "avatar": "avatar1",
+          "isLocked": false,
+          "createdAt": "2026-07-09T03:00:00.000Z",
+          "updatedAt": "2026-07-09T03:00:00.000Z"
+        },
+        "token": "{{supabase_service_role_api_key_12yl}}..."
+      }
+order: 1000

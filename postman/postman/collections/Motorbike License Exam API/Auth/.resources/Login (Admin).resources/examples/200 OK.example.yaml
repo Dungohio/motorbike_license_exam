@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/auth/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: |-
+      {
+        "email": "admin@example.com",
+        "password": "admin123"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "user": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "name": "Administrator",
+          "email": "admin@example.com",
+          "role": "admin",
+          "avatar": "avatar1",
+          "isLocked": false,
+          "createdAt": "2026-07-09T03:00:00.000Z",
+          "updatedAt": "2026-07-09T03:00:00.000Z"
+        },
+        "token": "{{supabase_service_role_api_key_12yl}}..."
+      }
+order: 1000

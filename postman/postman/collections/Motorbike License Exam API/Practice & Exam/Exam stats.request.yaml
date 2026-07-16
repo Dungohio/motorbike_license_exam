@@ -1,0 +1,11 @@
+$kind: http-request
+description: |-
+  Thống kê học tập của chính user đang đăng nhập.
+
+  **Trả về:** số lần thi, số lần đậu, tỉ lệ đậu (%), điểm trung bình (%), thời điểm thi gần nhất.
+url: "{{baseUrl}}/exams/stats"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+examples: ./.resources/Exam stats.resources/examples
+order: 4000

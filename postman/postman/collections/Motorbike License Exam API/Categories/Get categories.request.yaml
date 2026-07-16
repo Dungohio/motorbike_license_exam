@@ -1,4 +1,9 @@
 $kind: http-request
+description: |-
+  Danh sách chủ đề câu hỏi. Không cần đăng nhập.
+
+  **Trả về:** mảng chủ đề — lấy `_id` để lọc câu hỏi/ôn tập theo chủ đề.
 url: "{{baseUrl}}/categories"
 method: GET
+examples: ./.resources/Get categories.resources/examples
 order: 1000

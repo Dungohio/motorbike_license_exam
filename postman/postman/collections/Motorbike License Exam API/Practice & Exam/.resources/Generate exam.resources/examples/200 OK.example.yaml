@@ -1,0 +1,46 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/exams/generate"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: text
+    content: |-
+      {
+        "licenseClass": "<licenseClassId>"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "licenseClass": {
+          "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+          "code": "A1",
+          "name": "Hạng A1"
+        },
+        "config": {
+          "numQuestions": 25,
+          "durationMinutes": 19,
+          "passScore": 21
+        },
+        "questions": [
+          {
+            "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+            "content": "Biển báo trong hình có ý nghĩa gì?",
+            "imageUrl": "/images/signs/cam-nguoc-chieu.svg",
+            "options": [
+              "Cấm đi ngược chiều.",
+              "Cấm dừng xe và đỗ xe."
+            ],
+            "isCritical": false
+          }
+        ]
+      }
+order: 1000

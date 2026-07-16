@@ -1,0 +1,22 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/exams/stats"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "attempts": 5,
+        "passedCount": 3,
+        "passRate": 60,
+        "avgScorePercent": 78,
+        "lastExamAt": "2026-07-16T02:09:00.000Z"
+      }
+order: 1000

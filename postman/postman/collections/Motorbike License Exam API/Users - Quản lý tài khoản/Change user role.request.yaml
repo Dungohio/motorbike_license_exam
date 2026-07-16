@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Đổi vai trò user↔admin (chỉ admin). Không thể tự đổi vai trò chính mình (400).
+
+  **Trả về:** user sau khi đổi.
+url: "{{baseUrl}}/users/:id/role"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+body:
+  type: text
+  content: |-
+    {
+      "role": "admin"
+    }
+examples: ./.resources/Change user role.resources/examples
+order: 2000

@@ -292,11 +292,13 @@ body {
   object-fit: cover;
 }
 
+/* Ảnh banner có nhân vật bên trái nên chữ đặt ở nửa phải */
 .auth-side-caption {
   position: absolute;
-  left: 3rem;
-  bottom: 3rem;
+  left: 45%;
   right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: #fff;
   text-shadow: 0 2px 8px rgba(10, 40, 90, 0.55);
 }

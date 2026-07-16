@@ -1,0 +1,56 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/questions?page=1&limit=10"
+  method: GET
+  headers:
+    Authorization: Bearer {{token}}
+  queryParams:
+    - key: page
+      value: "1"
+    - key: limit
+      value: "10"
+    - key: licenseClass
+      value: ""
+      disabled: true
+    - key: category
+      value: ""
+      disabled: true
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "items": [
+          {
+            "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+            "licenseClass": {
+              "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+              "code": "A1"
+            },
+            "category": {
+              "_id": "665f1a2b3c4d5e6f7a8b9c0d",
+              "name": "Biển báo giao thông",
+              "slug": "bien-bao-giao-thong"
+            },
+            "content": "Biển báo trong hình có ý nghĩa gì?",
+            "imageUrl": "/images/signs/cam-nguoc-chieu.svg",
+            "options": [
+              "Cấm đi ngược chiều.",
+              "Cấm dừng xe và đỗ xe.",
+              "Đường một chiều được phép đi."
+            ],
+            "correctIndex": 0,
+            "explanation": "Biển tròn nền đỏ, vạch trắng nằm ngang là biển \"Cấm đi ngược chiều\" (P.102).",
+            "isCritical": false
+          }
+        ],
+        "total": 60,
+        "page": 1,
+        "limit": 10,
+        "totalPages": 6
+      }
+order: 1000

@@ -1,0 +1,25 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/questions/upload-image"
+  method: POST
+  headers:
+    Authorization: Bearer {{token}}
+  body:
+    type: formdata
+    content:
+      - type: file
+        key: image
+        src:
+          - ""
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "url": "/uploads/question-665f1a2b-1784159139470.svg"
+      }
+order: 1000
