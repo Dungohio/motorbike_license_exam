@@ -16,6 +16,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminQuestions from './pages/admin/AdminQuestions';
 import AdminQuestionForm from './pages/admin/AdminQuestionForm';
 import AdminCategories from './pages/admin/AdminCategories';
+import AdminUsers from './pages/admin/AdminUsers';
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/admin/questions/new" element={<ProtectedRoute adminOnly><AdminQuestionForm /></ProtectedRoute>} />
         <Route path="/admin/questions/:id/edit" element={<ProtectedRoute adminOnly><AdminQuestionForm /></ProtectedRoute>} />
         <Route path="/admin/categories" element={<ProtectedRoute adminOnly><AdminCategories /></ProtectedRoute>} />
+        <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsers /></ProtectedRoute>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

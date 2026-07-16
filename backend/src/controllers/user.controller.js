@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const User = require('../models/User');
+const ExamResult = require('../models/ExamResult');
 const asyncHandler = require('../utils/asyncHandler');
 const { UPLOAD_DIR } = require('../middlewares/upload.middleware');
 
@@ -65,4 +66,103 @@ const uploadAvatarImage = asyncHandler(async (req, res) => {
   res.json({ user });
 });
 
-module.exports = { updateProfile, changePassword, uploadAvatarImage };
+/* ================= Quản lý tài khoản (admin) ================= */
+
+// GET /api/users?search=&page=&limit= (admin) - danh sách user + số lần thi
+const getUsers = asyncHandler(async (req, res) => {
+  const { search, page = 1, limit = 10 } = req.query;
+
+  const filter = {};
+  if (search) {
+    // Tìm theo tên hoặc email, không phân biệt hoa thường
+    const regex = new RegExp(search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    filter.$or = [{ name: regex }, { email: regex }];
+  }
+
+  const pageNum = Math.max(parseInt(page, 10) || 1, 1);
+  const limitNum = Math.max(parseInt(limit, 10) || 10, 1);
+
+  const [users, total] = await Promise.all([
+    User.find(filter)
+      .select('-passwordHash')
+      .sort({ createdAt: -1 })
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum),
+    User.countDocuments(filter),
+  ]);
+
+  // Đếm số lần thi của từng user trong trang hiện tại
+  const counts = await ExamResult.aggregate([
+    { $match: { user: { $in: users.map((u) => u._id) } } },
+    { $group: { _id: '$user', attempts: { $sum: 1 } } },
+  ]);
+  const attemptsByUser = new Map(counts.map((c) => [String(c._id), c.attempts]));
+
+  res.json({
+    items: users.map((u) => ({
+      ...u.toJSON(),
+      examAttempts: attemptsByUser.get(String(u._id)) || 0,
+    })),
+    total,
+    page: pageNum,
+    limit: limitNum,
+    totalPages: Math.ceil(total / limitNum),
+  });
+});
+
+// PUT /api/users/:id/role (admin) - đổi vai trò user<->admin
+const changeRole = asyncHandler(async (req, res) => {
+  const { role } = req.body;
+  if (!['user', 'admin'].includes(role)) {
+    return res.status(400).json({ message: "Vai trò phải là 'user' hoặc 'admin'" });
+  }
+  if (req.params.id === String(req.user._id)) {
+    return res.status(400).json({ message: 'Không thể tự đổi vai trò của chính mình' });
+  }
+
+  const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
+  if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản' });
+  res.json({ user });
+});
+
+// PUT /api/users/:id/lock (admin) - khóa / mở khóa tài khoản
+const toggleLock = asyncHandler(async (req, res) => {
+  if (req.params.id === String(req.user._id)) {
+    return res.status(400).json({ message: 'Không thể tự khóa tài khoản của chính mình' });
+  }
+
+  const user = await User.findById(req.params.id);
+  if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản' });
+
+  user.isLocked = !user.isLocked;
+  await user.save();
+  res.json({ user });
+});
+
+// DELETE /api/users/:id (admin) - xóa tài khoản + toàn bộ lịch sử thi
+const deleteUser = asyncHandler(async (req, res) => {
+  if (req.params.id === String(req.user._id)) {
+    return res.status(400).json({ message: 'Không thể tự xóa tài khoản của chính mình' });
+  }
+
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản' });
+
+  // Dọn dữ liệu liên quan: lịch sử thi + ảnh avatar đã upload
+  await ExamResult.deleteMany({ user: user._id });
+  if ((user.avatar || '').startsWith('/uploads/')) {
+    fs.promises.unlink(path.join(UPLOAD_DIR, path.basename(user.avatar))).catch(() => {});
+  }
+
+  res.json({ message: 'Đã xóa tài khoản và lịch sử thi liên quan' });
+});
+
+module.exports = {
+  updateProfile,
+  changePassword,
+  uploadAvatarImage,
+  getUsers,
+  changeRole,
+  toggleLock,
+  deleteUser,
+};

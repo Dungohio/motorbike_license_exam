@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     avatar: { type: String, default: 'avatar1' }, // tên avatar trong bộ có sẵn ở frontend
+    isLocked: { type: Boolean, default: false }, // tài khoản bị admin khóa thì không đăng nhập được
   },
   { timestamps: true }
 );

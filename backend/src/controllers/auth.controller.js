@@ -45,6 +45,9 @@ const login = asyncHandler(async (req, res) => {
   if (!user || !(await user.comparePassword(password))) {
     return res.status(401).json({ message: 'Email hoặc mật khẩu không đúng' });
   }
+  if (user.isLocked) {
+    return res.status(403).json({ message: 'Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.' });
+  }
 
   const token = signToken(user);
   res.json({ user, token });

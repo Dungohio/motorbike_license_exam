@@ -11,6 +11,7 @@ import {
   Speedometer2,
   ListCheck,
   Tags,
+  People,
   BoxArrowRight,
   List,
 } from 'react-bootstrap-icons';
@@ -32,6 +33,7 @@ const ADMIN_MENU = [
   { to: '/admin', label: 'Tổng quan', icon: Speedometer2, end: true },
   { to: '/admin/questions', label: 'Quản lý câu hỏi', icon: ListCheck },
   { to: '/admin/categories', label: 'Quản lý chủ đề', icon: Tags },
+  { to: '/admin/users', label: 'Quản lý tài khoản', icon: People },
 ];
 
 // Nội dung menu dùng chung cho sidebar desktop và Offcanvas mobile
