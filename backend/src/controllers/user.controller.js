@@ -29,8 +29,11 @@ const changePassword = asyncHandler(async (req, res) => {
   if (!oldPassword || !newPassword) {
     return res.status(400).json({ message: 'Vui lòng nhập mật khẩu cũ và mật khẩu mới' });
   }
-  if (newPassword.length < 6) {
-    return res.status(400).json({ message: 'Mật khẩu mới phải có ít nhất 6 ký tự' });
+  // Cùng luật mật khẩu với đăng ký: ≥6 ký tự, có chữ hoa và ký tự đặc biệt
+  if (!/^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/.test(newPassword)) {
+    return res.status(400).json({
+      message: 'Mật khẩu mới tối thiểu 6 ký tự, gồm ít nhất 1 chữ HOA và 1 ký tự đặc biệt (ví dụ @, #, !)',
+    });
   }
 
   // req.user không chứa passwordHash (đã bị loại ở middleware) nên phải query lại

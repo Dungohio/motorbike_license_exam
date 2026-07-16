@@ -7,6 +7,9 @@ import authBanner from '../assets/auth-banner.png';
 import logo from '../assets/logo.png';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Mật khẩu: tối thiểu 6 ký tự, ít nhất 1 chữ hoa và 1 ký tự đặc biệt
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/;
+const PASSWORD_RULE = 'Mật khẩu tối thiểu 6 ký tự, gồm ít nhất 1 chữ HOA và 1 ký tự đặc biệt (ví dụ @, #, !)';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -31,7 +34,7 @@ export default function RegisterPage() {
     else if (!EMAIL_REGEX.test(form.email)) errs.email = 'Email không đúng định dạng';
 
     if (!form.password) errs.password = 'Vui lòng nhập mật khẩu';
-    else if (form.password.length < 6) errs.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+    else if (!PASSWORD_REGEX.test(form.password)) errs.password = PASSWORD_RULE;
 
     if (!form.confirm) errs.confirm = 'Vui lòng nhập lại mật khẩu';
     else if (form.confirm !== form.password) errs.confirm = 'Mật khẩu nhập lại không khớp';
@@ -105,12 +108,13 @@ export default function RegisterPage() {
             <Form.Label><Lock className="me-1" />Mật khẩu</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Ít nhất 6 ký tự"
+              placeholder="Ví dụ: MatKhau@1"
               value={form.password}
               onChange={(e) => setField('password', e.target.value)}
               isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+            <Form.Text muted>{PASSWORD_RULE}.</Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-4">

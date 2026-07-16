@@ -62,6 +62,14 @@ export default function ProfilePage() {
   const changePassword = async (e) => {
     e.preventDefault();
     setPwMsg(null);
+    // Cùng luật với đăng ký: ≥6 ký tự, có chữ hoa và ký tự đặc biệt
+    if (!/^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/.test(pw.newPassword)) {
+      setPwMsg({
+        type: 'danger',
+        text: 'Mật khẩu mới tối thiểu 6 ký tự, gồm ít nhất 1 chữ HOA và 1 ký tự đặc biệt (ví dụ @, #, !)',
+      });
+      return;
+    }
     if (pw.newPassword !== pw.confirm) {
       setPwMsg({ type: 'danger', text: 'Mật khẩu nhập lại không khớp' });
       return;
@@ -198,7 +206,9 @@ export default function ProfilePage() {
                     minLength={6}
                     required
                   />
-                  <Form.Text muted>Ít nhất 6 ký tự.</Form.Text>
+                  <Form.Text muted>
+                    Tối thiểu 6 ký tự, gồm ít nhất 1 chữ HOA và 1 ký tự đặc biệt (ví dụ @, #, !).
+                  </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Nhập lại mật khẩu mới</Form.Label>

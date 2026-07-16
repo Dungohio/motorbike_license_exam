@@ -10,6 +10,10 @@ function signToken(user) {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Mật khẩu: tối thiểu 6 ký tự, ít nhất 1 chữ hoa và 1 ký tự đặc biệt
+const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/;
+const PASSWORD_RULE =
+  'Mật khẩu tối thiểu 6 ký tự, gồm ít nhất 1 chữ HOA và 1 ký tự đặc biệt (ví dụ @, #, !)';
 
 // POST /api/auth/register
 const register = asyncHandler(async (req, res) => {
@@ -23,8 +27,8 @@ const register = asyncHandler(async (req, res) => {
   if (!EMAIL_REGEX.test(email)) {
     return res.status(400).json({ message: 'Email không đúng định dạng' });
   }
-  if (password.length < 6) {
-    return res.status(400).json({ message: 'Mật khẩu phải có ít nhất 6 ký tự' });
+  if (!PASSWORD_REGEX.test(password)) {
+    return res.status(400).json({ message: PASSWORD_RULE });
   }
 
   const passwordHash = await User.hashPassword(password);
