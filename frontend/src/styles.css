@@ -274,33 +274,35 @@ body {
 
 .auth-side {
   flex: 1;
-  position: relative;
   display: none;
 }
 
 @media (min-width: 992px) {
   .auth-side {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    padding: 3rem;
+    background: linear-gradient(160deg, #2f8fe8, #8ecdfb);
   }
 }
 
+/* Ảnh hiển thị nguyên vẹn, thu nhỏ thành khối bo góc thay vì phủ kín bị cắt */
 .auth-side img {
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 640px;
+  height: auto;
+  border-radius: 1.25rem;
+  box-shadow: 0 1rem 3rem rgba(8, 59, 140, 0.35);
 }
 
-/* Ảnh banner có nhân vật bên trái nên chữ đặt ở nửa phải */
 .auth-side-caption {
-  position: absolute;
-  left: 45%;
-  right: 3rem;
-  top: 50%;
-  transform: translateY(-50%);
+  max-width: 640px;
+  text-align: center;
   color: #fff;
-  text-shadow: 0 2px 8px rgba(10, 40, 90, 0.55);
+  text-shadow: 0 2px 8px rgba(10, 40, 90, 0.45);
 }
 
 .auth-form-col {
