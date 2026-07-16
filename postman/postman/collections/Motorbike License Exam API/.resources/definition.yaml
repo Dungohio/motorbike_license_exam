@@ -1,0 +1,2 @@
+$kind: collection
+description: Bộ API test cho web ôn thi bằng lái xe máy (Express + Mongoose). Đăng nhập trước để tự lưu token vào biến {{token}}.

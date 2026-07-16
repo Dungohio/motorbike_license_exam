@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/exams/generate"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "licenseClass": "<licenseClassId>"
+    }
+order: 2000

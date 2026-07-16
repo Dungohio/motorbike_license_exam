@@ -1,0 +1,6 @@
+name: Motorbike License Exam - Local
+values:
+  - key: baseUrl
+    value: 'http://localhost:5000/api'
+  - key: token
+    value: ''

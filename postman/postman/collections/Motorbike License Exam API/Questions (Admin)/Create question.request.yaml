@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/questions"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: |-
+    {
+      "licenseClass": "<licenseClassId>",
+      "category": "<categoryId>",
+      "content": "Câu hỏi mẫu?",
+      "imageUrl": "",
+      "options": ["Đáp án A", "Đáp án B", "Đáp án C"],
+      "correctIndex": 0,
+      "explanation": "Giải thích...",
+      "isCritical": false
+    }
+order: 4000

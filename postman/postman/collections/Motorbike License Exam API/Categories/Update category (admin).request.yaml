@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/categories/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+body:
+  type: text
+  content: |-
+    {
+      "name": "Tên chủ đề mới"
+    }
+order: 3000

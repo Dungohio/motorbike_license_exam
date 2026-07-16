@@ -1,0 +1,9 @@
+$kind: http-request
+name: Lock/unlock user (admin)
+url: "{{baseUrl}}/users/:id/lock"
+method: PUT
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+order: 5000

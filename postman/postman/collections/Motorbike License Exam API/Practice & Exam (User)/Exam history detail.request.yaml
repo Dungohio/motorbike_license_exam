@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/exams/history/:id"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+order: 6000

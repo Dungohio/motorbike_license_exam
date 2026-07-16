@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/questions/:id"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+pathVariables:
+  id: ""
+body:
+  type: text
+  content: |-
+    {
+      "content": "Nội dung câu hỏi đã sửa"
+    }
+order: 5000

@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/practice?licenseClass=<licenseClassId>"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+queryParams:
+  - key: licenseClass
+    value: <licenseClassId>
+  - key: category
+    value: ""
+    disabled: true
+  - key: critical
+    value: "true"
+    disabled: true
+order: 1000
