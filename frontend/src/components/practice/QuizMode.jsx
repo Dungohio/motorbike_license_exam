@@ -48,12 +48,14 @@ export default function QuizMode({ questions }) {
       <Card className="shadow-sm border-0 text-center mx-auto" style={{ maxWidth: 520 }}>
         <Card.Body className="py-5">
           <Trophy size={56} className="text-warning mb-3" />
-          <h4 className="fw-bold">Hoàn thành bài ôn tập!</h4>
+          <h4 className="fw-bold">Hoàn thành bài ôn tập</h4>
           <p className="fs-5 mb-1">
             Đúng <strong className="text-brand">{correctCount}/{questions.length}</strong> câu ({percent}%)
           </p>
           <p className="text-muted small">
-            {percent >= 80 ? 'Rất tốt! Bạn đã sẵn sàng thi thử.' : 'Hãy ôn lại các câu sai rồi luyện thêm nhé.'}
+            {percent >= 80
+              ? 'Kết quả tốt. Bạn có thể chuyển sang phần thi thử.'
+              : 'Bạn nên ôn lại các câu trả lời sai trước khi thi thử.'}
           </p>
           <Button variant="primary" onClick={restart}>
             <ArrowCounterclockwise className="me-2" />Làm lại từ đầu
@@ -109,7 +111,7 @@ export default function QuizMode({ questions }) {
             <Alert variant={chosen === q.correctIndex ? 'success' : 'danger'} className="mt-3 mb-0">
               <div className="fw-bold mb-1">
                 {chosen === q.correctIndex ? (
-                  <><CheckCircleFill className="me-2" />Chính xác!</>
+                  <><CheckCircleFill className="me-2" />Trả lời đúng</>
                 ) : (
                   <><XCircleFill className="me-2" />Chưa đúng. Đáp án đúng là {String.fromCharCode(65 + q.correctIndex)}.</>
                 )}

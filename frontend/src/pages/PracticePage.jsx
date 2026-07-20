@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Form, Row, Col, Card, Button, Spinner, Alert, Nav } from 'react-bootstrap';
 import {
   UiChecksGrid,
-  Stack,
   JournalText,
   ExclamationTriangleFill,
   Search,
@@ -10,12 +9,10 @@ import {
 import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import QuizMode from '../components/practice/QuizMode';
-import FlashcardMode from '../components/practice/FlashcardMode';
 import DocumentMode from '../components/practice/DocumentMode';
 
 const MODES = [
   { key: 'quiz', label: 'Trắc nghiệm', icon: UiChecksGrid },
-  { key: 'flashcard', label: 'Flashcard', icon: Stack },
   { key: 'document', label: 'Tài liệu', icon: JournalText },
 ];
 
@@ -55,7 +52,7 @@ export default function PracticePage() {
     setLoading(false);
   };
 
-  const ModeComponent = { quiz: QuizMode, flashcard: FlashcardMode, document: DocumentMode }[mode];
+  const ModeComponent = { quiz: QuizMode, document: DocumentMode }[mode];
 
   return (
     <div>
@@ -66,7 +63,8 @@ export default function PracticePage() {
       {criticalOnly && (
         <Alert variant="danger" className="py-2">
           <ExclamationTriangleFill className="me-2" />
-          Sai một câu <strong>điểm liệt</strong> khi thi thật là trượt — hãy luyện đến khi đúng tuyệt đối!
+          Theo quy định, trả lời sai một câu <strong>điểm liệt</strong> trong bài thi sẽ không đạt
+          dù tổng điểm đủ yêu cầu.
         </Alert>
       )}
 

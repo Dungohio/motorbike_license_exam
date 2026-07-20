@@ -28,7 +28,7 @@ export default function HistoryPage() {
 
       {results.length === 0 ? (
         <div className="text-center py-5">
-          <img src={cardHistory} alt="" style={{ maxWidth: 260, opacity: 0.9 }} className="mb-3 rounded-3" />
+          <img src={cardHistory} alt="" style={{ maxWidth: 260, opacity: 0.9 }} className="mb-3" />
           <p className="text-muted">Bạn chưa có lần thi nào.</p>
           <Button as={Link} to="/exam" variant="primary">
             <FileEarmarkText className="me-2" />Thi thử ngay

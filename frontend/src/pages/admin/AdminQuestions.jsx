@@ -162,7 +162,7 @@ export default function AdminQuestions() {
         </Modal.Header>
         <Modal.Body>
           <p className="mb-1">Bạn chắc chắn muốn xóa câu hỏi này? Hành động không thể hoàn tác.</p>
-          <div className="bg-light rounded p-2 small text-muted">{deleting?.content}</div>
+          <div className="bg-light p-2 small text-muted">{deleting?.content}</div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-secondary" onClick={() => setDeleting(null)}>Hủy</Button>

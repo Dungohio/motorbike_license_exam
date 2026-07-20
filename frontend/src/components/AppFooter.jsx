@@ -32,7 +32,7 @@ export default function AppFooter() {
         </Row>
         <hr className="border-light opacity-25 my-3" />
         <div className="small text-center opacity-75">
-          © 2026 Ôn thi bằng lái xe máy. Chúc bạn thi đậu ngay lần đầu! 🎉
+          © 2026 Ôn thi bằng lái xe máy.
         </div>
       </Container>
     </footer>

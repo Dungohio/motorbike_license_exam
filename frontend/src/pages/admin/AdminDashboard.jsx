@@ -49,7 +49,7 @@ export default function AdminDashboard() {
               <Card as={Link} to={c.to} className="shadow-sm border-0 text-decoration-none h-100 feature-card">
                 <Card.Body className="d-flex align-items-center gap-3">
                   <div
-                    className="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                    className="d-flex align-items-center justify-content-center flex-shrink-0"
                     style={{ width: 56, height: 56, background: `${c.color}1a`, color: c.color }}
                   >
                     <Icon size={26} />

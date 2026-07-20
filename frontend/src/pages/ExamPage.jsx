@@ -98,7 +98,7 @@ export default function ExamPage() {
             </Form.Select>
 
             {selected && (
-              <div className="bg-light rounded p-3 small mb-3">
+              <div className="bg-light p-3 small mb-3">
                 <div className="d-flex justify-content-between"><span>Số câu hỏi</span><strong>{selected.examConfig.numQuestions} câu</strong></div>
                 <div className="d-flex justify-content-between"><span>Thời gian</span><strong>{selected.examConfig.durationMinutes} phút</strong></div>
                 <div className="d-flex justify-content-between"><span>Điểm đậu</span><strong>≥ {selected.examConfig.passScore}/{selected.examConfig.numQuestions}</strong></div>
@@ -151,8 +151,8 @@ export default function ExamPage() {
               </div>
 
               <div className="small text-muted mb-3">
-                <div><span className="d-inline-block rounded me-2" style={{ width: 12, height: 12, background: '#0d6efd' }} />Đã trả lời ({answeredCount})</div>
-                <div><span className="d-inline-block rounded me-2 border" style={{ width: 12, height: 12, background: '#fff' }} />Chưa trả lời ({unanswered})</div>
+                <div><span className="d-inline-block me-2" style={{ width: 12, height: 12, background: '#0d6efd' }} />Đã trả lời ({answeredCount})</div>
+                <div><span className="d-inline-block me-2 border" style={{ width: 12, height: 12, background: '#fff' }} />Chưa trả lời ({unanswered})</div>
                 <div><span className="d-inline-block rounded-circle me-2" style={{ width: 8, height: 8, background: '#dc3545', marginLeft: 2, marginRight: 10 }} />Câu điểm liệt</div>
               </div>
 

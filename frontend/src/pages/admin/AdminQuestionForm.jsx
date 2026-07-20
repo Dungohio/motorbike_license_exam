@@ -189,7 +189,7 @@ export default function AdminQuestionForm() {
                       src={form.imageUrl}
                       alt="xem trước"
                       style={{ maxHeight: 90 }}
-                      className="border rounded p-1 bg-white"
+                      className="border p-1 bg-white"
                     />
                     <Button
                       variant="outline-danger"

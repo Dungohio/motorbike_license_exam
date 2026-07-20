@@ -64,7 +64,7 @@ export default function HomePage() {
     {
       img: cardCritical,
       title: 'Ôn câu điểm liệt',
-      desc: 'Tuyển tập câu điểm liệt — sai một câu là trượt. Luyện đến khi thuộc lòng!',
+      desc: 'Tuyển tập câu điểm liệt — trả lời sai một câu là không đạt bài thi.',
       to: '/practice?critical=true',
       btn: 'Luyện ngay',
       variant: 'outline-danger',
@@ -84,11 +84,11 @@ export default function HomePage() {
   return (
     <div>
       {/* ===== Hero banner ===== */}
-      <div className="hero-banner rounded-4 overflow-hidden shadow mb-5">
+      <div className="hero-banner overflow-hidden shadow mb-5">
         <div className="hero-overlay">
           <h1 className="hero-title">Tự tin thi đậu lý thuyết<br />bằng lái xe máy</h1>
           <p className="hero-subtitle">
-            Ôn luyện theo bộ đề chuẩn Việt Nam · Chào {user?.name}!
+            Ôn luyện theo bộ đề chuẩn Việt Nam · Xin chào, {user?.name}
           </p>
           <div className="d-flex gap-2 flex-wrap">
             <Button as={Link} to="/exam" size="lg" variant="light" className="fw-bold text-brand">
