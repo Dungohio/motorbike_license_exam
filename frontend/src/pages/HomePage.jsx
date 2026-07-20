@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row, Col, Card, Button, Table, Accordion, Badge } from 'react-bootstrap';
-import { ExclamationTriangleFill, LightbulbFill } from 'react-bootstrap-icons';
+import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -9,29 +8,6 @@ import cardPractice from '../assets/card-practice.png';
 import cardExam from '../assets/card-exam.png';
 import cardCritical from '../assets/card-critical.svg';
 import cardHistory from '../assets/card-history.svg';
-
-const TIPS = [
-  {
-    title: 'Nắm chắc câu điểm liệt trước tiên',
-    body: 'Chỉ cần sai 1 câu điểm liệt là trượt dù tổng điểm đủ. Hãy vào mục"Ôn câu điểm liệt" và luyện đến khi đúng 100% trước khi thi thử.',
-  },
-  {
-    title: 'Học theo chủ đề, không học tràn lan',
-    body: 'Chia nhỏ theo chủ đề: khái niệm & quy tắc → biển báo → sa hình → đạo đức. Nắm chắc từng phần rồi mới chuyển phần tiếp theo.',
-  },
-  {
-    title: 'Mẹo với câu biển báo',
-    body: 'Biển tròn đỏ là CẤM, tam giác vàng là NGUY HIỂM, tròn xanh là HIỆU LỆNH, vuông/chữ nhật xanh là CHỈ DẪN. Nhớ 4 nhóm này là xử lý được đa số câu biển báo.',
-  },
-  {
-    title: 'Phân bố thời gian khi thi',
-    body: 'Trung bình mỗi câu chỉ có ~45 giây. Câu nào chắc chắn làm ngay, câu phân vân đánh dấu bỏ qua rồi quay lại sau, tránh sa lầy một câu quá lâu.',
-  },
-  {
-    title: 'Thi thử nhiều lần trước ngày thi thật',
-    body: 'Hãy thi thử đến khi ĐẬU liên tục 5 lần liền. Xem lại kỹ các câu sai trong phần lịch sử thi để không lặp lại lỗi cũ.',
-  },
-];
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -149,56 +125,6 @@ export default function HomePage() {
         ))}
       </Row>
 
-      {/* ===== Mẹo thi & quy định ===== */}
-      <h4 className="text-brand fw-bold mb-3">Quy định & mẹo thi</h4>
-      <Row className="g-4">
-        <Col lg={5}>
-          <Card className="h-100">
-            <Card.Header className="bg-primary text-white fw-bold">
-              Cấu trúc đề thi từng hạng
-            </Card.Header>
-            <Card.Body className="p-0">
-              <Table className="mb-0 align-middle" hover>
-                <thead>
-                  <tr className="table-light">
-                    <th>Hạng</th>
-                    <th>Số câu</th>
-                    <th>Thời gian</th>
-                    <th>Điểm đậu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {classes.map((c) => (
-                    <tr key={c._id}>
-                      <td className="fw-bold text-brand">{c.code}</td>
-                      <td>{c.examConfig.numQuestions} câu</td>
-                      <td>{c.examConfig.durationMinutes} phút</td>
-                      <td>≥ {c.examConfig.passScore}/{c.examConfig.numQuestions}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <div className="p-3 small text-muted">
-                <ExclamationTriangleFill className="text-danger me-1" />
-                Với mọi hạng: trả lời sai <strong>câu điểm liệt</strong> sẽ bị trượt
-                dù tổng điểm vẫn đạt yêu cầu.
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col lg={7}>
-          <Accordion defaultActiveKey="0">
-            {TIPS.map((tip, i) => (
-              <Accordion.Item eventKey={String(i)} key={i}>
-                <Accordion.Header>
-                  <LightbulbFill className="text-warning me-2" />{tip.title}
-                </Accordion.Header>
-                <Accordion.Body className="small">{tip.body}</Accordion.Body>
-              </Accordion.Item>
-            ))}
-          </Accordion>
-        </Col>
-      </Row>
     </div>
   );
 }
