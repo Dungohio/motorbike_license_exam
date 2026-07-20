@@ -236,41 +236,19 @@ body {
   background: rgba(255, 255, 255, 0.28);
 }
 
-/* ===== Trang đăng nhập / đăng ký ===== */
+/* ===== Trang đăng nhập / đăng ký: form ở chính giữa trên nền xanh ===== */
 .auth-page {
   min-height: 100vh;
   display: flex;
-  align-items: stretch;
-}
-
-/* Panel trái trang đăng nhập/đăng ký: nền xanh nước biển, không dùng ảnh */
-.auth-side {
-  flex: 1;
-  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
   background: #0d6efd;
-}
-
-@media (min-width: 992px) {
-  .auth-side {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-  }
-}
-
-.auth-side-caption {
-  max-width: 560px;
-  color: #fff;
-  text-align: center;
 }
 
 .auth-form-col {
   width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  max-width: 440px;
   padding: 2.5rem;
   background: #fff;
 }

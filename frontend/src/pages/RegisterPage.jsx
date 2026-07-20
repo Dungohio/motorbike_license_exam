@@ -62,14 +62,8 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
-      <div className="auth-side">
-        <div className="auth-side-caption">
-          <h2 className="fw-bold">Bắt đầu hành trình lấy bằng của bạn</h2>
-          <p className="mb-0">Tạo tài khoản miễn phí để ôn tập và thi thử không giới hạn.</p>
-        </div>
-      </div>
-
-      <div className="auth-form-col mx-auto">
+      {/* Form đăng ký ở chính giữa */}
+      <div className="auth-form-col">
         <div className="text-center mb-4">
           <img src={logo} alt="Logo" width={72} height={72} style={{ borderRadius: '50%' }} />
           <h4 className="text-brand fw-bold mt-3 mb-1">Đăng ký tài khoản</h4>

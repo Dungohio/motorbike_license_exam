@@ -50,16 +50,8 @@ export default function LoginPage() {
 
   return (
     <div className="auth-page">
-      {/* Panel xanh nước biển bên trái (ẩn trên mobile) */}
-      <div className="auth-side">
-        <div className="auth-side-caption">
-          <h2 className="fw-bold">Tự tin thi đậu lý thuyết bằng lái xe máy</h2>
-          <p className="mb-0">Ôn luyện theo bộ đề chuẩn Việt Nam — mọi lúc, mọi nơi.</p>
-        </div>
-      </div>
-
-      {/* Form bên phải */}
-      <div className="auth-form-col mx-auto">
+      {/* Form đăng nhập ở chính giữa */}
+      <div className="auth-form-col">
         <div className="text-center mb-4">
           <img src={logo} alt="Logo" width={72} height={72} style={{ borderRadius: '50%' }} />
           <h4 className="text-brand fw-bold mt-3 mb-1">Đăng nhập</h4>
