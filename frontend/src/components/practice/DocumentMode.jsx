@@ -6,7 +6,7 @@ export default function DocumentMode({ questions }) {
   return (
     <div className="mx-auto" style={{ maxWidth: 820 }}>
       {questions.map((q, i) => (
-        <Card key={q._id} className="shadow-sm border-0 mb-3">
+        <Card key={q._id} className="mb-3">
           <Card.Body>
             <div className="d-flex justify-content-between align-items-start">
               <span className="fw-bold">Câu {i + 1}. {q.content}</span>

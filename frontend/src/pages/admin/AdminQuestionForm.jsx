@@ -128,7 +128,7 @@ export default function AdminQuestionForm() {
         {isEdit ? <><PencilSquare className="me-2" />Sửa câu hỏi</> : <><PlusLg className="me-2" />Thêm câu hỏi</>}
       </h3>
 
-      <Card className="shadow-sm border-0" style={{ maxWidth: 860 }}>
+      <Card className="" style={{ maxWidth: 860 }}>
         <Card.Body className="p-4">
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>

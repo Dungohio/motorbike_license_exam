@@ -45,7 +45,7 @@ export default function QuizMode({ questions }) {
   if (finished) {
     const percent = Math.round((correctCount / questions.length) * 100);
     return (
-      <Card className="shadow-sm border-0 text-center mx-auto" style={{ maxWidth: 520 }}>
+      <Card className="text-center mx-auto" style={{ maxWidth: 520 }}>
         <Card.Body className="py-5">
           <Trophy size={56} className="text-warning mb-3" />
           <h4 className="fw-bold">Hoàn thành bài ôn tập</h4>
@@ -76,7 +76,7 @@ export default function QuizMode({ questions }) {
       </div>
       <ProgressBar now={((index + (answered ? 1 : 0)) / questions.length) * 100} className="mb-3" style={{ height: 8 }} />
 
-      <Card className="shadow-sm border-0">
+      <Card className="">
         <Card.Body>
           <div className="d-flex justify-content-between align-items-start mb-2">
             <span className="fw-bold">{q.content}</span>

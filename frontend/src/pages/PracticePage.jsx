@@ -69,7 +69,7 @@ export default function PracticePage() {
       )}
 
       {/* Bộ lọc + chọn chế độ */}
-      <Card className="shadow-sm border-0 mb-4">
+      <Card className="mb-4">
         <Card.Body>
           <Row className="g-3 align-items-end">
             <Col md={4}>

@@ -55,7 +55,7 @@ export default function AdminQuestions() {
         </Button>
       </div>
 
-      <Card className="shadow-sm border-0 mb-3">
+      <Card className="mb-3">
         <Card.Body className="py-3">
           <Row className="g-2">
             <Col md={4}>
@@ -82,8 +82,8 @@ export default function AdminQuestions() {
         <div className="text-center py-5"><Spinner animation="border" /></div>
       ) : (
         <>
-          <Card className="shadow-sm border-0">
-            <Table hover responsive className="mb-0 align-middle">
+          <Card className="">
+            <Table responsive className="mb-0 align-middle">
               <thead>
                 <tr className="table-light">
                   <th style={{ minWidth: 320 }}>Nội dung</th>

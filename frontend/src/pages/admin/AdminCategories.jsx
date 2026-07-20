@@ -64,7 +64,7 @@ export default function AdminCategories() {
 
       <Row className="g-4">
         <Col md={5} lg={4}>
-          <Card className="shadow-sm border-0">
+          <Card className="">
             <Card.Header className="bg-white fw-bold">
               {editing ? (
                 <><PencilSquare className="me-2" />Sửa chủ đề</>
@@ -111,8 +111,8 @@ export default function AdminCategories() {
           {loading ? (
             <div className="text-center py-5"><Spinner animation="border" /></div>
           ) : (
-            <Card className="shadow-sm border-0">
-              <Table hover responsive className="mb-0 align-middle">
+            <Card className="">
+              <Table responsive className="mb-0 align-middle">
                 <thead>
                   <tr className="table-light">
                     <th>Tên</th>

@@ -13,7 +13,7 @@ import cardHistory from '../assets/card-history.svg';
 const TIPS = [
   {
     title: 'Nắm chắc câu điểm liệt trước tiên',
-    body: 'Chỉ cần sai 1 câu điểm liệt là trượt dù tổng điểm đủ. Hãy vào mục "Ôn câu điểm liệt" và luyện đến khi đúng 100% trước khi thi thử.',
+    body: 'Chỉ cần sai 1 câu điểm liệt là trượt dù tổng điểm đủ. Hãy vào mục"Ôn câu điểm liệt" và luyện đến khi đúng 100% trước khi thi thử.',
   },
   {
     title: 'Học theo chủ đề, không học tràn lan',
@@ -84,7 +84,7 @@ export default function HomePage() {
   return (
     <div>
       {/* ===== Hero banner ===== */}
-      <div className="hero-banner overflow-hidden shadow mb-5">
+      <div className="hero-banner overflow-hidden mb-5">
         <div className="hero-overlay">
           <h1 className="hero-title">Tự tin thi đậu lý thuyết<br />bằng lái xe máy</h1>
           <p className="hero-subtitle">
@@ -106,7 +106,7 @@ export default function HomePage() {
       <Row className="g-4 mb-5">
         {features.map((f) => (
           <Col md={6} lg={3} key={f.title}>
-            <Card className="h-100 shadow-sm border-0 feature-card">
+            <Card className="h-100 feature-card">
               <Card.Img variant="top" src={f.img} alt={f.title} className="feature-img" />
               <Card.Body className="d-flex flex-column">
                 <Card.Title className="fs-6 fw-bold">{f.title}</Card.Title>
@@ -125,7 +125,7 @@ export default function HomePage() {
       <Row className="g-3 mb-5">
         {classes.map((c) => (
           <Col md={4} key={c._id}>
-            <Card className="shadow-sm border-0 h-100 license-card">
+            <Card className="h-100 license-card">
               <Card.Body>
                 <div className="d-flex align-items-center mb-2">
                   <div className="license-badge me-3">{c.code}</div>
@@ -153,7 +153,7 @@ export default function HomePage() {
       <h4 className="text-brand fw-bold mb-3">Quy định & mẹo thi</h4>
       <Row className="g-4">
         <Col lg={5}>
-          <Card className="shadow-sm border-0 h-100">
+          <Card className="h-100">
             <Card.Header className="bg-primary text-white fw-bold">
               Cấu trúc đề thi từng hạng
             </Card.Header>

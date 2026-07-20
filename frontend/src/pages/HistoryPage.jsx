@@ -35,8 +35,8 @@ export default function HistoryPage() {
           </Button>
         </div>
       ) : (
-        <Card className="shadow-sm border-0">
-          <Table hover responsive className="mb-0 align-middle">
+        <Card className="">
+          <Table responsive className="mb-0 align-middle">
             <thead>
               <tr className="table-light">
                 <th>#</th>

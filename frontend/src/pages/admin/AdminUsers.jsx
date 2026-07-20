@@ -99,7 +99,7 @@ export default function AdminUsers() {
         <Badge bg="secondary" className="ms-2 fs-6">{data.total}</Badge>
       </h3>
 
-      <Card className="shadow-sm border-0 mb-3">
+      <Card className="mb-3">
         <Card.Body className="py-3">
           <InputGroup style={{ maxWidth: 420 }}>
             <InputGroup.Text><Search /></InputGroup.Text>
@@ -119,8 +119,8 @@ export default function AdminUsers() {
         <div className="text-center py-5"><Spinner animation="border" /></div>
       ) : (
         <>
-          <Card className="shadow-sm border-0">
-            <Table hover responsive className="mb-0 align-middle">
+          <Card className="">
+            <Table responsive className="mb-0 align-middle">
               <thead>
                 <tr className="table-light">
                   <th>Tài khoản</th>

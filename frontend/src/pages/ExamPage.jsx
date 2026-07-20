@@ -28,7 +28,7 @@ export default function ExamPage() {
   useEffect(() => {
     api.get('/license-classes').then((res) => {
       setClasses(res.data);
-      // Ưu tiên hạng bằng chọn sẵn từ trang chủ (nút "Thi hạng X")
+      // Ưu tiên hạng bằng chọn sẵn từ trang chủ (nút"Thi hạng X")
       const preselected = location.state?.licenseClass;
       if (preselected) setLicenseClass(preselected);
       else if (res.data[0]) setLicenseClass(res.data[0]._id);
@@ -84,7 +84,7 @@ export default function ExamPage() {
     return (
       <div>
         <h3 className="text-brand fw-bold mb-3">Thi thử</h3>
-        <Card className="shadow-sm border-0 mx-auto" style={{ maxWidth: 520 }}>
+        <Card className="mx-auto" style={{ maxWidth: 520 }}>
           <Card.Body className="p-4">
             <Form.Label className="fw-semibold">Chọn hạng bằng muốn thi</Form.Label>
             <Form.Select
@@ -128,7 +128,7 @@ export default function ExamPage() {
       <Row className="g-3">
         {/* Panel trái: đồng hồ + lưới số câu + nộp bài */}
         <Col lg={3}>
-          <Card className="shadow-sm border-0 sticky-top" style={{ top: '1rem' }}>
+          <Card className="sticky-top" style={{ top: '1rem' }}>
             <Card.Body>
               <div className={`text-center exam-timer mb-3 ${secondsLeft < 60 ? 'text-danger' : 'text-brand'}`}>
                 <ClockFill className="me-2" />{mmss(secondsLeft)}
@@ -165,7 +165,7 @@ export default function ExamPage() {
 
         {/* Câu hỏi hiện tại */}
         <Col lg={9}>
-          <Card className="shadow-sm border-0">
+          <Card className="">
             <Card.Body className="p-4">
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <h5 className="fw-bold mb-0">

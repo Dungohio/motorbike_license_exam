@@ -104,7 +104,7 @@ export default function ProfilePage() {
         <Row className="g-3 mb-4">
           {statCards.map((s) => (
             <Col xs={6} md={3} key={s.label}>
-              <Card className="shadow-sm border-0 text-center stat-card">
+              <Card className="text-center stat-card">
                 <Card.Body>
                   <div className="fs-3 fw-bold text-brand">{s.value}</div>
                   <div className="small text-muted">{s.label}</div>
@@ -118,7 +118,7 @@ export default function ProfilePage() {
       <Row className="g-4">
         {/* ===== Thông tin cá nhân + avatar ===== */}
         <Col lg={6}>
-          <Card className="shadow-sm border-0 h-100">
+          <Card className="h-100">
             <Card.Header className="bg-white fw-bold">
               <PersonCircle className="me-2" />Thông tin cá nhân
             </Card.Header>
@@ -181,7 +181,7 @@ export default function ProfilePage() {
 
         {/* ===== Đổi mật khẩu ===== */}
         <Col lg={6}>
-          <Card className="shadow-sm border-0 h-100">
+          <Card className="h-100">
             <Card.Header className="bg-white fw-bold">
               <KeyFill className="me-2" />Đổi mật khẩu
             </Card.Header>

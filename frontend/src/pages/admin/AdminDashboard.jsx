@@ -46,7 +46,7 @@ export default function AdminDashboard() {
           const Icon = c.icon;
           return (
             <Col md={6} lg={3} key={c.label}>
-              <Card as={Link} to={c.to} className="shadow-sm border-0 text-decoration-none h-100 feature-card">
+              <Card as={Link} to={c.to} className="text-decoration-none h-100 feature-card">
                 <Card.Body className="d-flex align-items-center gap-3">
                   <div
                     className="d-flex align-items-center justify-content-center flex-shrink-0"

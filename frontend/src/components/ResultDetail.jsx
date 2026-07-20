@@ -38,7 +38,7 @@ export default function ResultDetail({ result }) {
       </Alert>
 
       {result.answers.map((a, i) => (
-        <Card key={i} className="shadow-sm border-0 mb-3">
+        <Card key={i} className="mb-3">
           <Card.Body>
             <div className="d-flex justify-content-between align-items-start">
               <span className="fw-bold">Câu {i + 1}. {a.content}</span>
