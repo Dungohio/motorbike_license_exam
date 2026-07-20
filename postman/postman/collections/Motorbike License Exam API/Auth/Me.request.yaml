@@ -7,5 +7,5 @@ url: "{{baseUrl}}/auth/me"
 method: GET
 headers:
   Authorization: Bearer {{token}}
-examples: ./.resources/Me 🔒.resources/examples
+examples: .resources/Me.resources/examples
 order: 4000

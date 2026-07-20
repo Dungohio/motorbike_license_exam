@@ -40,18 +40,13 @@ body {
   padding: 0;
 }
 
-/* ===== Hero banner trang chủ ===== */
+/* ===== Hero banner trang chủ: nền xanh nước biển, không dùng ảnh ===== */
 .hero-banner {
   position: relative;
-  min-height: 340px;
-}
-
-.hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  min-height: 300px;
+  background: linear-gradient(135deg, #0a58ca 0%, #1d7af0 55%, #6fb4f9 100%);
+  display: flex;
+  align-items: center;
 }
 
 .hero-overlay {
@@ -272,39 +267,27 @@ body {
   align-items: stretch;
 }
 
+/* Panel trái trang đăng nhập/đăng ký: nền xanh nước biển, không dùng ảnh */
 .auth-side {
   flex: 1;
-  position: relative;
   display: none;
+  background: linear-gradient(160deg, #0a58ca 0%, #1d7af0 55%, #6fb4f9 100%);
 }
 
 @media (min-width: 992px) {
   .auth-side {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
   }
 }
 
-/* Ảnh phủ kín panel, neo về mép trái để nhân vật không bị cắt —
-   phần bị crop chỉ là khoảng trời trống bên phải */
-.auth-side img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left center;
-}
-
-/* Nhân vật ở bên trái ảnh nên chữ đặt ở nửa phải */
 .auth-side-caption {
-  position: absolute;
-  left: 42%;
-  right: 3rem;
-  top: 50%;
-  transform: translateY(-50%);
+  max-width: 560px;
   color: #fff;
   text-align: center;
-  text-shadow: 0 2px 8px rgba(10, 40, 90, 0.55);
+  text-shadow: 0 2px 8px rgba(10, 40, 90, 0.35);
 }
 
 .auth-form-col {

@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-import heroImg from '../assets/hero.png';
 import cardPractice from '../assets/card-practice.png';
 import cardExam from '../assets/card-exam.png';
 import cardCritical from '../assets/card-critical.svg';
@@ -86,7 +85,6 @@ export default function HomePage() {
     <div>
       {/* ===== Hero banner ===== */}
       <div className="hero-banner rounded-4 overflow-hidden shadow mb-5">
-        <img src={heroImg} alt="Ôn thi bằng lái xe máy" className="hero-img" />
         <div className="hero-overlay">
           <h1 className="hero-title">Tự tin thi đậu lý thuyết<br />bằng lái xe máy</h1>
           <p className="hero-subtitle">

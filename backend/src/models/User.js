@@ -1,22 +1,22 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: [true, 'Vui lòng nhập tên'], trim: true },
+    name: { type: String, required: [true, "Vui lòng nhập tên"], trim: true },
     email: {
       type: String,
-      required: [true, 'Vui lòng nhập email'],
+      required: [true, "Vui lòng nhập email"],
       unique: true,
       lowercase: true,
       trim: true,
     },
     passwordHash: { type: String, required: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    avatar: { type: String, default: 'avatar1' }, // tên avatar trong bộ có sẵn ở frontend
-    isLocked: { type: Boolean, default: false }, // tài khoản bị admin khóa thì không đăng nhập được
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    avatar: { type: String, default: "avatar1" },
+    isLocked: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Tạo hash mật khẩu (dùng khi đăng ký / seed)
@@ -36,4 +36,4 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
