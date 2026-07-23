@@ -14,6 +14,17 @@ function computePassScore(examConfig, total) {
   return Math.min(Math.max(Math.ceil(total * ratio), 1), total);
 }
 
+// GET /api/exams/available?licenseClass=
+// Số câu hỏi có thể đưa vào đề thi của một hạng bằng (đã trừ câu admin tắt).
+const getAvailableCount = asyncHandler(async (req, res) => {
+  const { licenseClass } = req.query;
+  if (!licenseClass) {
+    return res.status(400).json({ message: 'Vui lòng chọn hạng bằng (licenseClass)' });
+  }
+  const available = await Question.countDocuments({ licenseClass, inExam: { $ne: false } });
+  res.json({ available });
+});
+
 // POST /api/exams/generate  body: { licenseClass, numQuestions?, durationMinutes? }
 // Tạo đề thi ngẫu nhiên; người dùng có thể tự chọn số câu và thời gian,
 // không truyền thì dùng cấu hình mặc định của hạng bằng.
@@ -27,10 +38,12 @@ const generateExam = asyncHandler(async (req, res) => {
   const lc = await LicenseClass.findById(licenseClass);
   if (!lc) return res.status(404).json({ message: 'Không tìm thấy hạng bằng' });
 
-  // Số câu hiện có của hạng này, dùng làm giới hạn trên
-  const available = await Question.countDocuments({ licenseClass });
+  // Chỉ đếm câu được admin bật dùng trong đề thi
+  const available = await Question.countDocuments({ licenseClass, inExam: { $ne: false } });
   if (available === 0) {
-    return res.status(400).json({ message: 'Hạng bằng này chưa có câu hỏi nào' });
+    return res.status(400).json({
+      message: 'Hạng bằng này chưa có câu hỏi nào được bật dùng trong đề thi',
+    });
   }
 
   // Số câu: mặc định theo hạng, không vượt quá số câu đang có
@@ -40,7 +53,7 @@ const generateExam = asyncHandler(async (req, res) => {
   }
   if (count > available) {
     return res.status(400).json({
-      message: `Hạng ${lc.code} hiện chỉ có ${available} câu hỏi, không thể tạo đề ${count} câu`,
+      message: `Hạng ${lc.code} hiện chỉ có ${available} câu hỏi dùng được cho đề thi, không thể tạo đề ${count} câu`,
     });
   }
 
@@ -54,7 +67,7 @@ const generateExam = asyncHandler(async (req, res) => {
   }
 
   const sampled = await Question.aggregate([
-    { $match: { licenseClass: new mongoose.Types.ObjectId(licenseClass) } },
+    { $match: { licenseClass: new mongoose.Types.ObjectId(licenseClass), inExam: { $ne: false } } },
     { $sample: { size: count } },
     { $project: { correctIndex: 0, explanation: 0 } }, // ẩn đáp án
   ]);
@@ -183,4 +196,11 @@ const getStats = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { generateExam, submitExam, getHistory, getHistoryDetail, getStats };
+module.exports = {
+  generateExam,
+  submitExam,
+  getHistory,
+  getHistoryDetail,
+  getStats,
+  getAvailableCount,
+};

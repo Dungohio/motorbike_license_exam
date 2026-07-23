@@ -76,6 +76,7 @@ async function seed() {
     correctIndex: q.correctIndex,
     explanation: q.explanation || '',
     isCritical: q.isCritical || false,
+    inExam: true, // mặc định mọi câu đều được dùng trong đề thi
   }));
   await Question.insertMany(questionDocs);
   console.log(`Đã tạo ${questionDocs.length} câu hỏi mẫu`);

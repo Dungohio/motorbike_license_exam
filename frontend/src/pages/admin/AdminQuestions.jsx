@@ -1,17 +1,21 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Table, Button, Form, Row, Col, Badge, Pagination, Spinner, Card, Modal } from 'react-bootstrap';
-import { PlusLg, PencilSquare, Trash, ListCheck, ExclamationTriangleFill } from 'react-bootstrap-icons';
+import { Table, Button, Form, Row, Col, Badge, Pagination, Spinner, Card, Modal, Alert } from 'react-bootstrap';
+import {
+  PlusLg, PencilSquare, Trash, ListCheck, ExclamationTriangleFill, CheckLg, XLg,
+} from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 
 export default function AdminQuestions() {
   const [classes, setClasses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filters, setFilters] = useState({ licenseClass: '', category: '' });
+  const [filters, setFilters] = useState({ licenseClass: '', category: '', inExam: '' });
   const [data, setData] = useState({ items: [], total: 0, page: 1, totalPages: 1 });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(null); // câu hỏi đang chờ xác nhận xóa
+  const [selected, setSelected] = useState([]); // id các câu đang được tích chọn
+  const [notice, setNotice] = useState(''); // thông báo sau thao tác hàng loạt
 
   useEffect(() => {
     api.get('/license-classes').then((res) => setClasses(res.data));
@@ -23,8 +27,10 @@ export default function AdminQuestions() {
     const params = { page, limit: 10 };
     if (filters.licenseClass) params.licenseClass = filters.licenseClass;
     if (filters.category) params.category = filters.category;
+    if (filters.inExam) params.inExam = filters.inExam;
     const res = await api.get('/questions', { params });
     setData(res.data);
+    setSelected([]); // đổi trang/bộ lọc thì bỏ chọn
     setLoading(false);
   }, [page, filters]);
 
@@ -42,6 +48,25 @@ export default function AdminQuestions() {
     setFilters({ ...filters, [e.target.name]: e.target.value });
     setPage(1);
   };
+
+  /* ----- Tích chọn ----- */
+  const toggleOne = (id) =>
+    setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+
+  const allOnPageSelected =
+    data.items.length > 0 && data.items.every((q) => selected.includes(q._id));
+
+  const toggleAllOnPage = () =>
+    setSelected(allOnPageSelected ? [] : data.items.map((q) => q._id));
+
+  /* ----- Bật/tắt dùng trong đề thi ----- */
+  const setInExam = async (ids, inExam) => {
+    const res = await api.patch('/questions/bulk-in-exam', { ids, inExam });
+    setNotice(res.data.message);
+    load();
+  };
+
+  const inExamCount = data.items.filter((q) => q.inExam !== false).length;
 
   return (
     <div>
@@ -74,9 +99,38 @@ export default function AdminQuestions() {
                 ))}
               </Form.Select>
             </Col>
+            <Col md={4}>
+              <Form.Select name="inExam" value={filters.inExam} onChange={onFilter}>
+                <option value="">Tất cả trạng thái đề thi</option>
+                <option value="true">Đang dùng trong đề thi</option>
+                <option value="false">Không dùng trong đề thi</option>
+              </Form.Select>
+            </Col>
           </Row>
         </Card.Body>
       </Card>
+
+      {notice && (
+        <Alert variant="success" dismissible onClose={() => setNotice('')} className="py-2">
+          {notice}
+        </Alert>
+      )}
+
+      {/* Thanh thao tác hàng loạt, chỉ hiện khi có câu được tích */}
+      {selected.length > 0 && (
+        <Card className="mb-3 border-primary">
+          <Card.Body className="py-2 d-flex align-items-center flex-wrap gap-2">
+            <span className="fw-semibold">Đã chọn {selected.length} câu</span>
+            <Button size="sm" variant="success" onClick={() => setInExam(selected, true)}>
+              <CheckLg className="me-1" />Dùng trong đề thi
+            </Button>
+            <Button size="sm" variant="outline-secondary" onClick={() => setInExam(selected, false)}>
+              <XLg className="me-1" />Không dùng trong đề thi
+            </Button>
+            <Button size="sm" variant="link" onClick={() => setSelected([])}>Bỏ chọn</Button>
+          </Card.Body>
+        </Card>
+      )}
 
       {loading ? (
         <div className="text-center py-5"><Spinner animation="border" /></div>
@@ -86,18 +140,34 @@ export default function AdminQuestions() {
             <Table responsive className="mb-0 align-middle">
               <thead>
                 <tr className="table-light">
-                  <th style={{ minWidth: 320 }}>Nội dung</th>
+                  <th style={{ width: 44 }}>
+                    <Form.Check
+                      type="checkbox"
+                      checked={allOnPageSelected}
+                      onChange={toggleAllOnPage}
+                      title="Chọn tất cả câu trong trang"
+                    />
+                  </th>
+                  <th style={{ minWidth: 300 }}>Nội dung</th>
                   <th>Hạng</th>
                   <th>Chủ đề</th>
                   <th>Điểm liệt</th>
+                  <th>Dùng trong đề thi</th>
                   <th className="text-end">Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((q) => (
-                  <tr key={q._id}>
+                  <tr key={q._id} className={selected.includes(q._id) ? 'table-primary' : ''}>
                     <td>
-                      <div className="text-truncate" style={{ maxWidth: 420 }} title={q.content}>
+                      <Form.Check
+                        type="checkbox"
+                        checked={selected.includes(q._id)}
+                        onChange={() => toggleOne(q._id)}
+                      />
+                    </td>
+                    <td>
+                      <div className="text-truncate" style={{ maxWidth: 380 }} title={q.content}>
                         {q.content}
                       </div>
                     </td>
@@ -107,6 +177,14 @@ export default function AdminQuestions() {
                       {q.isCritical && (
                         <Badge bg="danger"><ExclamationTriangleFill className="me-1" />Có</Badge>
                       )}
+                    </td>
+                    <td>
+                      <Form.Check
+                        type="switch"
+                        checked={q.inExam !== false}
+                        onChange={() => setInExam([q._id], q.inExam === false)}
+                        title={q.inExam !== false ? 'Đang dùng trong đề thi' : 'Không dùng trong đề thi'}
+                      />
                     </td>
                     <td className="text-end text-nowrap">
                       <Button
@@ -132,7 +210,7 @@ export default function AdminQuestions() {
                 ))}
                 {data.items.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="text-center text-muted py-4">
+                    <td colSpan={7} className="text-center text-muted py-4">
                       Chưa có câu hỏi nào khớp bộ lọc.
                     </td>
                   </tr>
@@ -141,15 +219,20 @@ export default function AdminQuestions() {
             </Table>
           </Card>
 
-          {data.totalPages > 1 && (
-            <Pagination className="mt-3">
-              {Array.from({ length: data.totalPages }, (_, i) => (
-                <Pagination.Item key={i + 1} active={i + 1 === page} onClick={() => setPage(i + 1)}>
-                  {i + 1}
-                </Pagination.Item>
-              ))}
-            </Pagination>
-          )}
+          <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+            <span className="small text-muted">
+              Trang này: {inExamCount}/{data.items.length} câu đang dùng trong đề thi
+            </span>
+            {data.totalPages > 1 && (
+              <Pagination className="mb-0">
+                {Array.from({ length: data.totalPages }, (_, i) => (
+                  <Pagination.Item key={i + 1} active={i + 1 === page} onClick={() => setPage(i + 1)}>
+                    {i + 1}
+                  </Pagination.Item>
+                ))}
+              </Pagination>
+            )}
+          </div>
         </>
       )}
 

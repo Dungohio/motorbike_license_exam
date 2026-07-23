@@ -38,6 +38,9 @@ const questionSchema = new mongoose.Schema(
     },
     explanation: { type: String, default: "" },
     isCritical: { type: Boolean, default: false }, // câu điểm liệt (sai là trượt)
+    // Admin bật/tắt câu này có được đưa vào đề thi hay không.
+    // Tắt thì vẫn dùng để ôn tập, chỉ không xuất hiện trong bài thi.
+    inExam: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

@@ -3,11 +3,15 @@ const asyncHandler = require('../utils/asyncHandler');
 
 // GET /api/questions (admin) - có lọc theo hạng/chủ đề và phân trang
 const getQuestions = asyncHandler(async (req, res) => {
-  const { licenseClass, category, page = 1, limit = 10 } = req.query;
+  const { licenseClass, category, inExam, page = 1, limit = 10 } = req.query;
 
   const filter = {};
   if (licenseClass) filter.licenseClass = licenseClass;
   if (category) filter.category = category;
+  // Lọc theo trạng thái dùng trong đề thi.
+  // Câu cũ chưa có field inExam được coi là đang bật, nên dùng $ne: false.
+  if (inExam === 'true') filter.inExam = { $ne: false };
+  else if (inExam === 'false') filter.inExam = false;
 
   const pageNum = Math.max(parseInt(page, 10) || 1, 1);
   const limitNum = Math.max(parseInt(limit, 10) || 10, 1);
@@ -73,6 +77,29 @@ const uploadImage = asyncHandler(async (req, res) => {
   res.status(201).json({ url: `/uploads/${req.file.filename}` });
 });
 
+// PATCH /api/questions/bulk-in-exam (admin)
+// body: { ids: [questionId], inExam: true|false }
+// Bật/tắt hàng loạt việc dùng câu hỏi trong đề thi.
+const bulkSetInExam = asyncHandler(async (req, res) => {
+  const { ids, inExam } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ message: 'Vui lòng chọn ít nhất một câu hỏi' });
+  }
+  if (typeof inExam !== 'boolean') {
+    return res.status(400).json({ message: "Trường 'inExam' phải là true hoặc false" });
+  }
+
+  const result = await Question.updateMany({ _id: { $in: ids } }, { inExam });
+  res.json({
+    message: inExam
+      ? `Đã bật dùng trong đề thi cho ${result.modifiedCount} câu hỏi`
+      : `Đã tắt dùng trong đề thi cho ${result.modifiedCount} câu hỏi`,
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount,
+  });
+});
+
 module.exports = {
   getQuestions,
   getQuestionById,
@@ -80,4 +107,5 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   uploadImage,
+  bulkSetInExam,
 };

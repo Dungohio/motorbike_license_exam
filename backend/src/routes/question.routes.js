@@ -6,6 +6,7 @@ const {
   updateQuestion,
   deleteQuestion,
   uploadImage,
+  bulkSetInExam,
 } = require('../controllers/question.controller');
 const { protect, adminOnly } = require('../middlewares/auth.middleware');
 const { uploadQuestionImage } = require('../middlewares/upload.middleware');
@@ -22,6 +23,9 @@ router.post('/upload-image', (req, res, next) => {
     next();
   });
 }, uploadImage);
+
+// Đặt trước '/:id' để không bị hiểu nhầm là id
+router.patch('/bulk-in-exam', bulkSetInExam);
 
 router.get('/', getQuestions);
 router.get('/:id', getQuestionById);

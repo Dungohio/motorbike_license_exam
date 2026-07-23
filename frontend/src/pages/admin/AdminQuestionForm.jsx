@@ -13,6 +13,7 @@ const emptyForm = {
   correctIndex: 0,
   explanation: '',
   isCritical: false,
+  inExam: true,
 };
 
 export default function AdminQuestionForm() {
@@ -53,6 +54,7 @@ export default function AdminQuestionForm() {
           correctIndex: q.correctIndex,
           explanation: q.explanation || '',
           isCritical: q.isCritical,
+          inExam: q.inExam !== false,
         });
         setLoading(false);
       });
@@ -250,11 +252,23 @@ export default function AdminQuestionForm() {
             <Form.Check
               type="switch"
               id="critical-switch"
-              label="Câu điểm liệt (trả lời sai là trượt bài thi)"
+              label="Câu điểm liệt (trả lời sai là không đạt bài thi)"
               checked={form.isCritical}
               onChange={(e) => setField('isCritical', e.target.checked)}
-              className="mb-4"
+              className="mb-2"
             />
+
+            <Form.Check
+              type="switch"
+              id="in-exam-switch"
+              label="Dùng câu hỏi này trong đề thi"
+              checked={form.inExam}
+              onChange={(e) => setField('inExam', e.target.checked)}
+              className="mb-1"
+            />
+            <Form.Text muted className="d-block mb-4">
+              Tắt thì câu hỏi vẫn dùng để ôn tập nhưng không xuất hiện trong bài thi.
+            </Form.Text>
 
             <div className="d-flex gap-2">
               <Button type="submit" variant="primary">
