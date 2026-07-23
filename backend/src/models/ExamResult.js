@@ -27,6 +27,8 @@ const examResultSchema = new mongoose.Schema(
     answers: [answerSchema],
     score: { type: Number, required: true }, // số câu đúng
     total: { type: Number, required: true }, // tổng số câu
+    passScore: { type: Number, required: true }, // số câu đúng tối thiểu để đạt (tính theo tỉ lệ)
+    durationMinutes: { type: Number }, // thời gian làm bài đã chọn cho lần thi này
     passed: { type: Boolean, required: true },
     failedByCritical: { type: Boolean, default: false }, // trượt do sai câu điểm liệt
     durationSeconds: { type: Number, default: 0 }, // thời gian đã làm

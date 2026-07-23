@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div className="text-center mb-4">
           <img src={logo} alt="Logo" width={72} height={72} style={{ borderRadius: '50%' }} />
           <h4 className="text-brand fw-bold mt-3 mb-1">Đăng nhập</h4>
-          <p className="text-muted small mb-0">Đăng nhập để tiếp tục ôn luyện.</p>
+          
         </div>
 
         {serverError && <Alert variant="danger">{serverError}</Alert>}

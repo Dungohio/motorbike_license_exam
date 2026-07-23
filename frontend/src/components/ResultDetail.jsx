@@ -17,14 +17,20 @@ export default function ResultDetail({ result }) {
         <div className="d-flex align-items-center gap-3">
           {result.passed ? <TrophyFill size={40} /> : <XCircleFill size={40} />}
           <div className="flex-grow-1">
-            <h4 className="mb-1">{result.passed ? 'ĐẬU' : 'TRƯỢT'}</h4>
+            <h4 className="mb-1">{result.passed ? 'ĐẠT' : 'KHÔNG ĐẠT'}</h4>
             <div>
               Số câu đúng: <strong>{result.score}/{result.total}</strong> ({percent}%)
+              {result.passScore != null && (
+                <span className="ms-2">· Điểm đạt: ≥ {result.passScore}/{result.total}</span>
+              )}
             </div>
+            {result.durationMinutes && (
+              <div className="small">Thời gian làm bài: {result.durationMinutes} phút</div>
+            )}
             {result.failedByCritical && (
               <div className="mt-1">
                 <ExclamationTriangleFill className="me-1" />
-                Lý do trượt: trả lời sai câu điểm liệt.
+                Lý do không đạt: trả lời sai câu điểm liệt.
               </div>
             )}
           </div>

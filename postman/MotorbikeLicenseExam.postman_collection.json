@@ -1843,10 +1843,10 @@
                 "generate"
               ]
             },
-            "description": "Tạo đề thi ngẫu nhiên theo cấu hình hạng bằng (A1: 25 câu/19 phút).\n\n**Trả về:** thông tin hạng + config + danh sách câu hỏi **KHÔNG có correctIndex/explanation** (chống lộ đáp án — chấm điểm ở server khi submit).",
+            "description": "Tạo đề thi ngẫu nhiên. Người dùng có thể tự chọn `numQuestions` (1 → số câu hiện có của hạng) và `durationMinutes` (1–180); bỏ trống thì dùng cấu hình mặc định của hạng (A1: 25 câu/19 phút).\n\nĐiểm đạt được tính theo tỉ lệ chuẩn của hạng, ví dụ A1 là 21/25 = 84% nên thi 10 câu cần đúng ≥ 9.\n\n**Trả về:** hạng bằng + config thực tế (numQuestions, durationMinutes, passScore) + defaultConfig + availableQuestions + danh sách câu hỏi **KHÔNG có correctIndex/explanation** (chống lộ đáp án — chấm điểm ở server khi submit).",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"licenseClass\": \"<licenseClassId>\"\n}"
+              "raw": "{\n  \"licenseClass\": \"<licenseClassId>\",\n  \"numQuestions\": 25,\n  \"durationMinutes\": 19\n}"
             }
           },
           "response": [

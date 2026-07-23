@@ -4,11 +4,22 @@ const LicenseClass = require('../models/LicenseClass');
 const ExamResult = require('../models/ExamResult');
 const asyncHandler = require('../utils/asyncHandler');
 
-// POST /api/exams/generate  body: { licenseClass }
-// Tạo đề thi gồm N câu ngẫu nhiên theo cấu hình của hạng bằng.
+const MAX_DURATION_MINUTES = 180;
+
+// Tính số câu đúng tối thiểu để đạt khi người dùng tự chọn số câu.
+// Giữ nguyên tỉ lệ chuẩn của hạng bằng, ví dụ A1: 21/25 = 84%
+// -> thi 10 câu thì cần đúng ceil(10 * 0.84) = 9 câu.
+function computePassScore(examConfig, total) {
+  const ratio = examConfig.passScore / examConfig.numQuestions;
+  return Math.min(Math.max(Math.ceil(total * ratio), 1), total);
+}
+
+// POST /api/exams/generate  body: { licenseClass, numQuestions?, durationMinutes? }
+// Tạo đề thi ngẫu nhiên; người dùng có thể tự chọn số câu và thời gian,
+// không truyền thì dùng cấu hình mặc định của hạng bằng.
 // KHÔNG trả correctIndex/explanation để tránh lộ đáp án.
 const generateExam = asyncHandler(async (req, res) => {
-  const { licenseClass } = req.body;
+  const { licenseClass, numQuestions, durationMinutes } = req.body;
   if (!licenseClass) {
     return res.status(400).json({ message: 'Vui lòng chọn hạng bằng (licenseClass)' });
   }
@@ -16,30 +27,56 @@ const generateExam = asyncHandler(async (req, res) => {
   const lc = await LicenseClass.findById(licenseClass);
   if (!lc) return res.status(404).json({ message: 'Không tìm thấy hạng bằng' });
 
-  const numQuestions = lc.examConfig.numQuestions;
-
-  // Lấy ngẫu nhiên numQuestions câu thuộc hạng này
-  const sampled = await Question.aggregate([
-    { $match: { licenseClass: new mongoose.Types.ObjectId(licenseClass) } },
-    { $sample: { size: numQuestions } },
-    { $project: { correctIndex: 0, explanation: 0 } }, // ẩn đáp án
-  ]);
-
-  if (sampled.length === 0) {
+  // Số câu hiện có của hạng này, dùng làm giới hạn trên
+  const available = await Question.countDocuments({ licenseClass });
+  if (available === 0) {
     return res.status(400).json({ message: 'Hạng bằng này chưa có câu hỏi nào' });
   }
 
+  // Số câu: mặc định theo hạng, không vượt quá số câu đang có
+  let count = numQuestions === undefined ? lc.examConfig.numQuestions : Number(numQuestions);
+  if (!Number.isInteger(count) || count < 1) {
+    return res.status(400).json({ message: 'Số câu hỏi phải là số nguyên lớn hơn 0' });
+  }
+  if (count > available) {
+    return res.status(400).json({
+      message: `Hạng ${lc.code} hiện chỉ có ${available} câu hỏi, không thể tạo đề ${count} câu`,
+    });
+  }
+
+  // Thời gian làm bài: mặc định theo hạng
+  const minutes =
+    durationMinutes === undefined ? lc.examConfig.durationMinutes : Number(durationMinutes);
+  if (!Number.isInteger(minutes) || minutes < 1 || minutes > MAX_DURATION_MINUTES) {
+    return res.status(400).json({
+      message: `Thời gian làm bài phải từ 1 đến ${MAX_DURATION_MINUTES} phút`,
+    });
+  }
+
+  const sampled = await Question.aggregate([
+    { $match: { licenseClass: new mongoose.Types.ObjectId(licenseClass) } },
+    { $sample: { size: count } },
+    { $project: { correctIndex: 0, explanation: 0 } }, // ẩn đáp án
+  ]);
+
   res.json({
     licenseClass: { _id: lc._id, code: lc.code, name: lc.name },
-    config: lc.examConfig,
+    config: {
+      numQuestions: sampled.length,
+      durationMinutes: minutes,
+      passScore: computePassScore(lc.examConfig, sampled.length),
+    },
+    defaultConfig: lc.examConfig, // cấu hình chuẩn của hạng, để client đối chiếu
+    availableQuestions: available,
     questions: sampled,
   });
 });
 
 // POST /api/exams/submit
-// body: { licenseClass, answers: [{ question, selectedIndex }], startedAt, durationSeconds }
+// body: { licenseClass, answers: [{ question, selectedIndex }], startedAt,
+//         durationSeconds, durationMinutes }
 const submitExam = asyncHandler(async (req, res) => {
-  const { licenseClass, answers, startedAt, durationSeconds } = req.body;
+  const { licenseClass, answers, startedAt, durationSeconds, durationMinutes } = req.body;
 
   if (!licenseClass || !Array.isArray(answers) || answers.length === 0) {
     return res.status(400).json({ message: 'Dữ liệu bài thi không hợp lệ' });
@@ -80,7 +117,9 @@ const submitExam = asyncHandler(async (req, res) => {
   }).filter(Boolean);
 
   const total = detailedAnswers.length;
-  const passed = score >= lc.examConfig.passScore && !failedByCritical;
+  // Server tự tính lại điểm đạt theo số câu thực tế, không tin giá trị client gửi
+  const passScore = computePassScore(lc.examConfig, total);
+  const passed = score >= passScore && !failedByCritical;
 
   const result = await ExamResult.create({
     user: req.user._id,
@@ -88,8 +127,10 @@ const submitExam = asyncHandler(async (req, res) => {
     answers: detailedAnswers,
     score,
     total,
+    passScore,
     passed,
     failedByCritical,
+    durationMinutes: durationMinutes || undefined,
     durationSeconds: durationSeconds || 0,
     startedAt: startedAt || null,
     submittedAt: new Date(),

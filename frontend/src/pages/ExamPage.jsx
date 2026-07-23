@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Form, Card, Button, Badge, Row, Col, Modal } from 'react-bootstrap';
+import { Form, Card, Button, Badge, Row, Col, Modal, Alert, InputGroup } from 'react-bootstrap';
 import {
   ClockFill,
   ChevronLeft,
@@ -7,15 +7,25 @@ import {
   SendFill,
   PlayFill,
   ExclamationTriangleFill,
+  ArrowCounterclockwise,
+  QuestionCircle,
 } from 'react-bootstrap-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../api/axios';
+
+const MAX_DURATION = 180;
 
 export default function ExamPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [classes, setClasses] = useState([]);
   const [licenseClass, setLicenseClass] = useState('');
+
+  const [numQuestions, setNumQuestions] = useState('');
+  const [durationMinutes, setDurationMinutes] = useState('');
+  const [available, setAvailable] = useState(null); // số câu hiện có của hạng đang chọn
+  const [setupError, setSetupError] = useState('');
+  const [starting, setStarting] = useState(false);
 
   const [exam, setExam] = useState(null); // { config, questions, licenseClass }
   const [current, setCurrent] = useState(0); // câu đang xem
@@ -28,20 +38,75 @@ export default function ExamPage() {
   useEffect(() => {
     api.get('/license-classes').then((res) => {
       setClasses(res.data);
-      // Ưu tiên hạng bằng chọn sẵn từ trang chủ (nút"Thi hạng X")
       const preselected = location.state?.licenseClass;
       if (preselected) setLicenseClass(preselected);
       else if (res.data[0]) setLicenseClass(res.data[0]._id);
     });
   }, [location.state]);
 
+  const selectedClass = classes.find((c) => c._id === licenseClass);
+
+  useEffect(() => {
+    if (!selectedClass) return;
+    setNumQuestions(String(selectedClass.examConfig.numQuestions));
+    setDurationMinutes(String(selectedClass.examConfig.durationMinutes));
+    setSetupError('');
+    api
+      .get('/practice', { params: { licenseClass: selectedClass._id } })
+      .then((res) => setAvailable(res.data.length))
+      .catch(() => setAvailable(null));
+  }, [selectedClass]);
+
+  const resetToDefault = () => {
+    if (!selectedClass) return;
+    setNumQuestions(String(selectedClass.examConfig.numQuestions));
+    setDurationMinutes(String(selectedClass.examConfig.durationMinutes));
+    setSetupError('');
+  };
+
+  // Điểm đạt tính theo tỉ lệ chuẩn của hạng, khớp cách tính ở server
+  const previewPassScore = () => {
+    const n = parseInt(numQuestions, 10);
+    if (!selectedClass || !Number.isInteger(n) || n < 1) return null;
+    const ratio = selectedClass.examConfig.passScore / selectedClass.examConfig.numQuestions;
+    return Math.min(Math.max(Math.ceil(n * ratio), 1), n);
+  };
+
   const startExam = async () => {
-    const res = await api.post('/exams/generate', { licenseClass });
-    setExam(res.data);
-    setAnswers({});
-    setCurrent(0);
-    setSecondsLeft(res.data.config.durationMinutes * 60);
-    setStartedAt(new Date().toISOString());
+    setSetupError('');
+    const n = parseInt(numQuestions, 10);
+    const m = parseInt(durationMinutes, 10);
+
+    if (!Number.isInteger(n) || n < 1) {
+      setSetupError('Số câu hỏi phải là số nguyên lớn hơn 0');
+      return;
+    }
+    if (available !== null && n > available) {
+      setSetupError(`Hạng ${selectedClass?.code} hiện chỉ có ${available} câu hỏi`);
+      return;
+    }
+    if (!Number.isInteger(m) || m < 1 || m > MAX_DURATION) {
+      setSetupError(`Thời gian làm bài phải từ 1 đến ${MAX_DURATION} phút`);
+      return;
+    }
+
+    setStarting(true);
+    try {
+      const res = await api.post('/exams/generate', {
+        licenseClass,
+        numQuestions: n,
+        durationMinutes: m,
+      });
+      setExam(res.data);
+      setAnswers({});
+      setCurrent(0);
+      setSecondsLeft(res.data.config.durationMinutes * 60);
+      setStartedAt(new Date().toISOString());
+    } catch (err) {
+      setSetupError(err.response?.data?.message || 'Không tạo được đề thi');
+    } finally {
+      setStarting(false);
+    }
   };
 
   const handleSubmit = useCallback(async () => {
@@ -52,6 +117,7 @@ export default function ExamPage() {
       licenseClass: exam.licenseClass._id,
       startedAt,
       durationSeconds,
+      durationMinutes: exam.config.durationMinutes,
       answers: exam.questions.map((q) => ({
         question: q._id,
         selectedIndex: answers[q._id] ?? null,
@@ -78,39 +144,96 @@ export default function ExamPage() {
     return `${m}:${s}`;
   };
 
-  /* ===== Màn hình chọn hạng bằng ===== */
+  /* ===== Màn hình thiết lập đề thi ===== */
   if (!exam) {
-    const selected = classes.find((c) => c._id === licenseClass);
+    const pass = previewPassScore();
+    const isDefault =
+      selectedClass &&
+      Number(numQuestions) === selectedClass.examConfig.numQuestions &&
+      Number(durationMinutes) === selectedClass.examConfig.durationMinutes;
+
     return (
       <div>
         <h3 className="text-brand fw-bold mb-3">Thi thử</h3>
-        <Card className="mx-auto" style={{ maxWidth: 520 }}>
+        <Card className="mx-auto" style={{ maxWidth: 560 }}>
           <Card.Body className="p-4">
-            <Form.Label className="fw-semibold">Chọn hạng bằng muốn thi</Form.Label>
-            <Form.Select
-              value={licenseClass}
-              onChange={(e) => setLicenseClass(e.target.value)}
-              className="mb-3"
-            >
-              {classes.map((c) => (
-                <option key={c._id} value={c._id}>Hạng {c.code} — {c.name}</option>
-              ))}
-            </Form.Select>
+            <Form.Group className="mb-3">
+              <Form.Label >Hạng bằng muốn thi</Form.Label>
+              <Form.Select value={licenseClass} onChange={(e) => setLicenseClass(e.target.value)}>
+                {classes.map((c) => (
+                  <option key={c._id} value={c._id}>Hạng {c.code} — {c.name}</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
 
-            {selected && (
-              <div className="bg-light p-3 small mb-3">
-                <div className="d-flex justify-content-between"><span>Số câu hỏi</span><strong>{selected.examConfig.numQuestions} câu</strong></div>
-                <div className="d-flex justify-content-between"><span>Thời gian</span><strong>{selected.examConfig.durationMinutes} phút</strong></div>
-                <div className="d-flex justify-content-between"><span>Điểm đậu</span><strong>≥ {selected.examConfig.passScore}/{selected.examConfig.numQuestions}</strong></div>
-                <div className="text-danger mt-2">
-                  <ExclamationTriangleFill className="me-1" />
-                  Sai câu điểm liệt là trượt dù đủ điểm.
-                </div>
+            <Row className="g-3 mb-3">
+              <Col sm={6}>
+                <Form.Label >Nhập số câu hỏi</Form.Label>
+                <InputGroup>
+                 
+                  <Form.Control
+                    type="number"
+                    min={1}
+                    max={available ?? undefined}
+                    value={numQuestions}
+                    onChange={(e) => setNumQuestions(e.target.value)}
+                  />
+                  <InputGroup.Text>câu</InputGroup.Text>
+                </InputGroup>
+                {/* <Form.Text muted>
+                  {available === null
+                    ? 'Đang tải số câu hiện có...'
+                    : `Hạng ${selectedClass?.code} hiện có ${available} câu`}
+                </Form.Text> */}
+              </Col>
+              <Col sm={6}>
+                <Form.Label >Thời gian làm bài</Form.Label>
+                <InputGroup>
+               
+                  <Form.Control
+                    type="number"
+                    min={1}
+                    max={MAX_DURATION}
+                    value={durationMinutes}
+                    onChange={(e) => setDurationMinutes(e.target.value)}
+                  />
+                  <InputGroup.Text>phút</InputGroup.Text>
+                </InputGroup>
+              
+              </Col>
+            </Row>
+
+          
+
+            {setupError && <Alert variant="danger" className="py-2">{setupError}</Alert>}
+
+            <div className="bg-light p-3 small mb-3">
+              <div className="fw-semibold mb-2">Tóm tắt bài thi</div>
+              <div className="d-flex justify-content-between">
+                <span>Số câu hỏi</span><strong>{numQuestions || '0'} câu</strong>
               </div>
-            )}
+              <div className="d-flex justify-content-between">
+                <span>Thời gian</span><strong>{durationMinutes || '0'} phút</strong>
+              </div>
+              <div className="d-flex justify-content-between">
+                <span>Điểm đạt</span>
+                <strong>{pass ? `≥ ${pass}/${numQuestions}` : '0'}</strong>
+              </div>
+              <div className="text-danger mt-2">
+                <ExclamationTriangleFill className="me-1" />
+                Trả lời sai câu điểm liệt là không đạt dù đủ điểm.
+              </div>
+            </div>
 
-            <Button variant="primary" size="lg" className="w-100" onClick={startExam}>
-              <PlayFill className="me-1" />Bắt đầu làm bài
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-100"
+              onClick={startExam}
+              disabled={starting}
+            >
+              <PlayFill className="me-1" />
+              {starting ? 'Đang tạo đề...' : 'Bắt đầu làm bài'}
             </Button>
           </Card.Body>
         </Card>
